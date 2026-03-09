@@ -21,6 +21,7 @@ import HomePage from '../pages/common/HomePage';
 import LoginPage from '../pages/common/LoginPage';
 import SignupPage from '../pages/common/SignupPage';
 import MyPage from '../pages/common/MyPage';
+import SupportCenterPage from '../pages/common/SupportCenterPage';
 
 // 사용자
 import LodgingListPage from '../pages/user/LodgingListPage';
@@ -59,6 +60,7 @@ export default function AppRouter() {
 
         {/* 로그인 필요 공통 */}
         <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+        <Route path="/support" element={<ProtectedRoute><SupportCenterPage /></ProtectedRoute>} />
 
         {/* 사용자 */}
         <Route path="/booking/:lodgingId" element={<ProtectedRoute allowedRoles={[ROLES.USER]}><BookingPage /></ProtectedRoute>} />

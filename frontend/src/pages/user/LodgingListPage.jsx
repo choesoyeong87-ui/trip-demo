@@ -39,6 +39,15 @@ function isRegionMatch(lodgingRegion, selectedRegion) {
   return aliasNormalized.some((alias) => lodging === alias || lodging.includes(alias) || alias.includes(lodging));
 }
 
+function isKeywordMatch(lodging, keyword) {
+  const term = normalizeRegionText(keyword);
+  if (!term) return true;
+  const haystack = [lodging.name, lodging.region, lodging.address, lodging.description]
+    .map(normalizeRegionText)
+    .join(' ');
+  return haystack.includes(term);
+}
+
 function sortLodgings(list, sort) {
   const copy = [...list];
   if (sort === 'price_asc') return copy.sort((a, b) => a.pricePerNight - b.pricePerNight);
@@ -81,6 +90,7 @@ function MapBoundsWatcher({ onBoundsChange }) {
 export default function LodgingListPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const keyword = params.get('keyword') || '';
   const region = params.get('region') || '';
   const checkIn = params.get('checkIn') || '';
   const checkOut = params.get('checkOut') || '';
@@ -99,10 +109,10 @@ export default function LodgingListPage() {
     getLodgings()
       .then((res) => {
         const all = Array.isArray(res.data) ? res.data : [];
-        setLodgings(region ? all.filter((lodging) => isRegionMatch(lodging.region, region)) : all);
+        setLodgings(all.filter((lodging) => isRegionMatch(lodging.region, region) && isKeywordMatch(lodging, keyword)));
       })
       .catch(() => setLodgings([]));
-  }, [region]);
+  }, [keyword, region]);
 
   const sorted = useMemo(() => sortLodgings(lodgings, sort), [lodgings, sort]);
 
@@ -209,6 +219,7 @@ export default function LodgingListPage() {
       <div style={s.searchSticky}>
         <div style={s.searchInner}>
           <SearchBar
+            defaultKeyword={keyword}
             defaultRegion={region}
             defaultCheckIn={checkIn}
             defaultCheckOut={checkOut}
@@ -221,7 +232,7 @@ export default function LodgingListPage() {
         <section style={s.listPane}>
           <div style={s.filterBar}>
             <p style={s.resultCount}>
-              {region ? `'${region}' 검색 결과` : '지도에 표시된 숙소'}
+              {keyword ? `'${keyword}' 검색 결과` : region ? `'${region}' 검색 결과` : '지도에 표시된 숙소'}
               <span style={s.count}> {visibleLodgings.length}개</span>
             </p>
             <div style={s.sortGroup}>

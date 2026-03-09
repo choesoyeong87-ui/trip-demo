@@ -326,7 +326,7 @@ export default function HomePage() {
           </div>
           <div style={s.heroRight}>
             <div style={s.searchShell}>
-              <SearchBar />
+              <SearchBar showTabs />
             </div>
             <div style={s.themeWrap}>
               <div style={s.themeTrack} className="tz-theme-track">

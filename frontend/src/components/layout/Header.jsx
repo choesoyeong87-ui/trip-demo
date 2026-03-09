@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../store/authStore';
 import { ROLES } from '../../constants/roles';
 import { C, MAX_WIDTH } from '../../styles/tokens';
@@ -7,6 +7,7 @@ import LogoMark from './LogoMark';
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -14,7 +15,7 @@ export default function Header() {
   const baseLinks = [
     { to: '/lodgings', label: '숙소 검색', primary: true },
     { to: '/lodgings?region=제주', label: '인기 지역' },
-    { to: '/inquiry/create', label: '문의 센터' },
+    { to: '/support', label: '문의센터' },
   ];
 
   const handleLogout = () => {
@@ -25,6 +26,13 @@ export default function Header() {
   };
 
   const initial = user?.name?.[0] || '?';
+
+  const isBaseLinkActive = (to) => {
+    if (to === '/lodgings') return location.pathname === '/lodgings' || location.pathname.startsWith('/lodgings/');
+    if (to.startsWith('/lodgings?region=')) return location.pathname === '/lodgings' && new URLSearchParams(location.search).has('region');
+    if (to === '/support') return location.pathname === '/support' || location.pathname.startsWith('/inquiry');
+    return location.pathname === to;
+  };
 
   const roleLinks = {
     [ROLES.USER]: [
@@ -44,6 +52,39 @@ export default function Header() {
     <header style={s.header}>
       <style>{`
         .tz-header-nav::-webkit-scrollbar { display: none; }
+        .tz-header-nav-item,
+        .tz-header-nav-item:link,
+        .tz-header-nav-item:visited,
+        .tz-header-nav-item:active {
+          outline: none !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .tz-header-nav-item:hover {
+          color: #353535 !important;
+          background: #fff !important;
+          border-color: #C8CED8 !important;
+        }
+        .tz-header-nav-item:focus,
+        .tz-header-nav-item:focus-visible {
+          outline: none !important;
+          border-color: #E7C2C2 !important;
+          box-shadow: 0 0 0 2px rgba(232,72,74,0.12);
+        }
+        .tz-header-nav-item.is-active {
+          color: #353535 !important;
+          background: #fff !important;
+          border-color: #C8CED8 !important;
+          box-shadow: none;
+        }
+        .tz-header-nav-item.tz-header-nav-item-primary.is-active {
+          color: #fff !important;
+          background: linear-gradient(135deg, #F05A5C 0%, #E8484A 100%) !important;
+          border-color: #E8484A !important;
+          box-shadow: none;
+        }
+        .tz-header-nav-item.tz-header-nav-item-primary:hover {
+          filter: brightness(0.98);
+        }
         @media (max-width: 1280px) {
           .tz-header-inner { grid-template-columns: auto 1fr auto !important; }
           .tz-header-nav a { padding: 6px 10px !important; font-size: 12px !important; }
@@ -80,7 +121,14 @@ export default function Header() {
 
         <nav style={s.nav} className="tz-header-nav">
           {baseLinks.map((link) => (
-            <Link key={link.to} to={link.to} style={link.primary ? s.navSearchLink : s.navLink}>{link.label}</Link>
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`tz-header-nav-item ${link.primary ? 'tz-header-nav-item-primary' : ''} ${isBaseLinkActive(link.to) ? 'is-active' : ''}`}
+              style={{ ...(link.primary ? s.navSearchLink : s.navLink), ...(isBaseLinkActive(link.to) ? (link.primary ? s.navSearchLinkActive : s.navLinkActive) : null) }}
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
 
@@ -175,24 +223,37 @@ const s = {
   nav: { display: 'flex', gap: '6px', flexWrap: 'nowrap', justifyContent: 'center', flex: 1, minWidth: 0, overflowX: 'hidden', scrollbarWidth: 'none' },
   navLink: {
     fontSize: '13px',
-    fontWeight: '600',
+    fontWeight: '700',
     color: C.textSub,
     textDecoration: 'none',
-    padding: '7px 12px',
-    borderRadius: '6px',
-    transition: 'color 0.15s, background 0.15s',
+    padding: '8px 13px',
+    borderRadius: '999px',
+    border: '1px solid #D9DEE6',
+    transition: 'color 0.15s, background 0.15s, border-color 0.15s',
     whiteSpace: 'nowrap',
+  },
+  navLinkActive: {
+    color: '#353535',
+    background: '#fff',
+    borderColor: '#C8CED8',
   },
   navSearchLink: {
     fontSize: '14px',
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#fff',
     textDecoration: 'none',
     padding: '8px 14px',
     borderRadius: '999px',
     background: 'linear-gradient(135deg, #F05A5C 0%, #E8484A 100%)',
-    boxShadow: '0 8px 18px rgba(232,72,74,0.25)',
+    border: '1px solid #E8484A',
     whiteSpace: 'nowrap',
+    transition: 'filter 0.15s ease, color 0.15s ease, background 0.15s ease, border-color 0.15s ease',
+  },
+  navSearchLinkActive: {
+    color: '#fff',
+    background: 'linear-gradient(135deg, #F05A5C 0%, #E8484A 100%)',
+    borderColor: '#E8484A',
+    boxShadow: 'none',
   },
   actions: { display: 'flex', alignItems: 'center', gap: '8px', minWidth: '220px', justifyContent: 'flex-end', flexWrap: 'nowrap' },
   mobileToggle: {

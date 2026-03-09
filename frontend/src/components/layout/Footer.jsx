@@ -26,7 +26,7 @@ export default function Footer() {
 
         <div style={s.linksCol}>
           <p style={s.colTitle}>지원</p>
-          <a href="/inquiry/create" style={s.link}>문의하기</a>
+          <a href="/support" style={s.link}>문의하기</a>
           <span style={s.info}>평일 09:00-18:00</span>
           <span style={s.info}>support@tripzone.kr</span>
         </div>
