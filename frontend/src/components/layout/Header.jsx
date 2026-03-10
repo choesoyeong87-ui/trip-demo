@@ -141,7 +141,7 @@ export default function Header() {
           ) : (
             <div style={s.profileWrap}>
               <button style={s.profilePillBtn} onClick={() => setMenuOpen(v => !v)}>
-                <div style={s.profilePillIcon}>🎈</div>
+                <div style={s.profilePillIcon}>😎</div>
                 <div style={s.profilePillText}>
                   <div style={s.profilePillName}>{user.name}</div>
                   <div style={s.profilePillGrade}>
@@ -382,7 +382,8 @@ const s = {
     width: '32px',
     height: '32px',
     borderRadius: '50%',
-    background: '#FFE0E0',
+    background: '#FFF1F1',
+    color: '#E8484A',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

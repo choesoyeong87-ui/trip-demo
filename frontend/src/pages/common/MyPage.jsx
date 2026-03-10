@@ -19,15 +19,15 @@ const SELLER_TABS = [
 ];
 
 function BookingsList({ bookings }) {
-  if (!bookings.length) return <p style={{ color: C.textSub }}>예약 내역이 없습니다.</p>;
+  if (!bookings.length) return <p style={{ color: C.textSub, padding: '20px 0' }}>예약 내역이 없습니다.</p>;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {bookings.map(b => (
         <div key={b.bookingId} style={sCard.card}>
           <img src={b.thumbnailUrl} alt={b.lodgingName} style={sCard.img} />
           <div style={sCard.body}>
             <div style={sCard.header}>
-              <p style={sCard.name}>{b.lodgingName}</p>
+              <h3 style={sCard.name}>{b.lodgingName}</h3>
               <Badge status={b.bookingStatus} />
             </div>
             <p style={sCard.meta}>{b.checkIn} ~ {b.checkOut} · {b.guests}명</p>
@@ -40,9 +40,9 @@ function BookingsList({ bookings }) {
 }
 
 function InquiriesList({ inquiries }) {
-  if (!inquiries.length) return <p style={{ color: C.textSub }}>문의 내역이 없습니다.</p>;
+  if (!inquiries.length) return <p style={{ color: C.textSub, padding: '20px 0' }}>문의 내역이 없습니다.</p>;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {inquiries.map(i => (
         <div key={i.inquiryId} style={sCard.inquiryCard}>
           <div style={sCard.inquiryTop}>
@@ -65,8 +65,8 @@ export default function MyPage() {
 
   useEffect(() => {
     if (user?.role === ROLES.USER) {
-      getMyBookings(user.userId || 1).then(res => setBookings(res.data)).catch(() => {});
-      getMyInquiries(user.userId || 1).then(res => setInquiries(res.data)).catch(() => {});
+      getMyBookings(user.userId || 1).then(res => setBookings(res.data)).catch(() => { });
+      getMyInquiries(user.userId || 1).then(res => setInquiries(res.data)).catch(() => { });
     }
   }, [user]);
 
@@ -149,84 +149,93 @@ export default function MyPage() {
 }
 
 const s = {
-  wrap: { background: C.bgGray, minHeight: 'calc(100vh - 160px)', padding: '48px 24px' },
-  inner: { maxWidth: MAX_WIDTH, margin: '0 auto', display: 'flex', gap: '40px', alignItems: 'flex-start' },
+  wrap: { background: C.bgWarm, minHeight: 'calc(100vh - 160px)', padding: '56px 24px' },
+  inner: { maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '28px', alignItems: 'flex-start' },
   sidebar: {
-    width: '260px',
+    width: '240px',
     flexShrink: 0,
     background: C.bg,
-    borderRadius: '16px',
+    borderRadius: '20px',
     padding: '24px',
-    boxShadow: S.card,
+    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+    border: `1px solid ${C.borderLight}`,
     position: 'sticky',
     top: '100px',
   },
-  profile: { display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: `1px solid ${C.borderLight}` },
+  profile: { display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '28px', paddingBottom: '24px', borderBottom: `1px solid ${C.borderLight}` },
   avatar: {
-    width: '48px',
-    height: '48px',
+    width: '56px',
+    height: '56px',
     borderRadius: '50%',
     background: C.primary,
     color: '#fff',
-    fontSize: '20px',
-    fontWeight: '700',
+    fontSize: '24px',
+    fontWeight: '800',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    boxShadow: '0 4px 12px rgba(232,72,74,0.3)',
   },
-  profileName: { fontSize: '16px', fontWeight: '700', color: C.text, margin: '0 0 2px' },
-  profileEmail: { fontSize: '12px', color: C.textSub, margin: '0 0 6px' },
-  roleBadge: { fontSize: '11px', fontWeight: '600', background: '#FFF0F3', color: C.primary, padding: '2px 8px', borderRadius: '20px' },
-  sideNav: { display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '24px' },
+  profileName: { fontSize: '18px', fontWeight: '800', color: C.text, margin: '0 0 4px' },
+  profileEmail: { fontSize: '12px', color: C.textSub, margin: '0 0 8px' },
+  roleBadge: { fontSize: '11px', fontWeight: '700', background: '#FFF1F1', color: C.primary, padding: '4px 10px', borderRadius: '999px', display: 'inline-block' },
+  sideNav: { display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '28px' },
   navItem: {
     width: '100%',
     textAlign: 'left',
-    padding: '10px 12px',
+    padding: '12px 14px',
     border: 'none',
-    borderRadius: R.md,
-    fontSize: '14px',
+    borderRadius: '12px',
+    fontSize: '15px',
     color: C.text,
     cursor: 'pointer',
+    transition: 'background 0.2s',
   },
   logoutBtn: {
     width: '100%',
-    padding: '10px',
-    background: 'none',
+    padding: '12px',
+    background: '#fff',
     border: `1px solid ${C.border}`,
-    borderRadius: R.md,
+    borderRadius: '12px',
     fontSize: '14px',
+    fontWeight: '600',
     color: C.textSub,
     cursor: 'pointer',
+    transition: 'background 0.2s, color 0.2s',
   },
   content: {
     flex: 1,
     background: C.bg,
-    borderRadius: '16px',
-    padding: '32px',
-    boxShadow: S.card,
+    borderRadius: '20px',
+    padding: '40px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+    border: `1px solid ${C.borderLight}`,
     minHeight: '400px',
   },
-  contentTitle: { fontSize: '22px', fontWeight: '700', color: C.text, margin: '0 0 24px' },
+  contentTitle: { fontSize: '24px', fontWeight: '800', color: '#1A1A1A', margin: '0 0 32px' },
 };
 
 const sCard = {
   card: {
     display: 'flex',
-    gap: '16px',
-    border: `1px solid ${C.borderLight}`,
-    borderRadius: R.lg,
+    gap: '24px',
+    border: `1px solid #F0EFEF`,
+    borderRadius: '20px',
     overflow: 'hidden',
-    padding: '16px',
+    padding: '24px',
+    background: '#fff',
+    transition: 'box-shadow 0.2s, transform 0.2s',
+    cursor: 'pointer',
   },
-  img: { width: '100px', height: '80px', objectFit: 'cover', borderRadius: R.md, flexShrink: 0 },
-  body: { flex: 1, minWidth: 0 },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' },
-  name: { fontSize: '15px', fontWeight: '700', color: C.text, margin: 0 },
-  meta: { fontSize: '13px', color: C.textSub, margin: '0 0 4px' },
-  price: { fontSize: '14px', fontWeight: '600', color: C.text, margin: 0 },
-  inquiryCard: { border: `1px solid ${C.borderLight}`, borderRadius: R.lg, padding: '16px 20px' },
-  inquiryTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' },
-  inquiryTitle: { fontSize: '15px', fontWeight: '600', color: C.text },
-  inquiryMeta: { fontSize: '13px', color: C.textSub, margin: 0 },
+  img: { width: '140px', height: '110px', objectFit: 'cover', borderRadius: '12px', flexShrink: 0 },
+  body: { flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' },
+  name: { fontSize: '18px', fontWeight: '800', color: C.text, margin: 0 },
+  meta: { fontSize: '14px', color: '#6A6A6A', margin: '0 0 12px' },
+  price: { fontSize: '18px', fontWeight: '800', color: C.text, margin: 0 },
+  inquiryCard: { border: `1px solid #F0EFEF`, borderRadius: '16px', padding: '20px 24px', background: '#fff' },
+  inquiryTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' },
+  inquiryTitle: { fontSize: '16px', fontWeight: '700', color: C.text },
+  inquiryMeta: { fontSize: '14px', color: '#888', margin: 0 },
 };
