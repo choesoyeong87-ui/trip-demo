@@ -492,19 +492,34 @@ export default function SearchBar({ defaultKeyword = '', defaultRegion = '', def
     <div style={s.root} className="tz-search-root">
       <style>{`
         .tz-search-root, .tz-search-root * { box-sizing: border-box; }
-        .tz-main-row { display:grid; grid-template-columns: minmax(0,2fr) minmax(0,.78fr) minmax(0,.62fr) auto; gap:10px; width:100%; }
-        .tz-search-root input::placeholder { color:#8B92A2; }
-        .tz-soft-field:hover { border-color:#d8dbe1; background:#fff; }
-        .tz-soft-field:focus-visible { outline:2px solid #f5c4c5; outline-offset:1px; }
+        .tz-main-row { 
+          display: flex;
+          align-items: center;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 999px;
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+          padding: 8px;
+        }
+        .tz-search-root input::placeholder { color:#8B92A2; font-weight: 500; }
+        .tz-soft-field { transition: background 0.2s; }
+        .tz-soft-field:hover { background: rgba(0,0,0,0.03); }
+        .tz-soft-divider { width: 1px; height: 32px; background: ${C.borderLight}; flex-shrink: 0; }
         .tz-guest-btn:hover { background:#f7f7f8; }
         .tz-guest-btn:active { transform: translateY(1px); }
         .tz-guest-btn:focus-visible { outline:2px solid #f2b7b8; outline-offset:1px; }
+        
         @media (max-width: 980px) {
-          .tz-main-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
-          .tz-search-btn { grid-column: 1 / -1; }
-        }
-        @media (max-width: 640px) {
-          .tz-main-row { grid-template-columns: minmax(0,1fr); }
+          .tz-main-row { 
+            flex-direction: column; 
+            border-radius: 24px; 
+            padding: 16px; 
+            gap: 12px; 
+          }
+          .tz-soft-divider { display: none; }
+          .tz-search-btn { width: 100%; border-radius: 16px !important; }
         }
       `}</style>
 
@@ -519,7 +534,7 @@ export default function SearchBar({ defaultKeyword = '', defaultRegion = '', def
       )}
 
       <div className="tz-main-row">
-        <div ref={keywordRef}>
+        <div ref={keywordRef} style={{ flex: '2', minWidth: 0 }}>
           <input
             value={keyword}
             onChange={(e) => {
@@ -536,7 +551,9 @@ export default function SearchBar({ defaultKeyword = '', defaultRegion = '', def
           />
         </div>
 
-        <div ref={dateRef}>
+        <div className="tz-soft-divider" />
+
+        <div ref={dateRef} style={{ flex: '1', minWidth: 0 }}>
           <button
             type="button"
             style={s.dateField}
@@ -551,7 +568,9 @@ export default function SearchBar({ defaultKeyword = '', defaultRegion = '', def
           </button>
         </div>
 
-        <div ref={guestRef}>
+        <div className="tz-soft-divider" />
+
+        <div ref={guestRef} style={{ flex: '0.8', minWidth: 0 }}>
           <button
             type="button"
             style={s.guestTrigger}
@@ -633,28 +652,27 @@ const s = {
   },
   keywordInput: {
     width: '100%',
-    height: '60px',
-    borderRadius: '14px',
-    border: '1px solid #E3E6EC',
-    background: C.bg,
+    height: '56px',
+    border: 'none',
+    background: 'transparent',
     color: '#1F2530',
     fontSize: '16px',
     fontWeight: 600,
-    padding: '0 20px',
+    padding: '0 24px',
     textAlign: 'left',
     outline: 'none',
     boxSizing: 'border-box',
   },
   dateField: {
     width: '100%',
-    height: '60px',
-    borderRadius: '14px',
-    border: '1px solid #E3E6EC',
-    background: '#FFFFFF',
-    color: '#8B92A2',
-    fontSize: '16px',
+    height: '56px',
+    border: 'none',
+    borderRadius: '999px',
+    background: 'transparent',
+    color: '#1F2530',
+    fontSize: '15px',
     fontWeight: 600,
-    padding: '0 14px',
+    padding: '0 16px',
     textAlign: 'center',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -663,12 +681,12 @@ const s = {
   },
   guestTrigger: {
     width: '100%',
-    height: '60px',
-    borderRadius: '14px',
-    border: '1px solid #E3E6EC',
-    background: '#FFFFFF',
-    color: '#8B92A2',
-    fontSize: '16px',
+    height: '56px',
+    border: 'none',
+    borderRadius: '999px',
+    background: 'transparent',
+    color: '#1F2530',
+    fontSize: '15px',
     fontWeight: 600,
     padding: '0 10px',
     textAlign: 'center',
@@ -704,16 +722,17 @@ const s = {
     whiteSpace: 'nowrap',
   },
   searchBtn: {
-    height: '60px',
-    borderRadius: '14px',
+    height: '56px',
+    borderRadius: '999px',
     border: 'none',
-    background: C.primary,
+    background: `linear-gradient(135deg, ${C.primary} 0%, #D4393B 100%)`,
     color: '#fff',
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: 800,
-    padding: '0 22px',
+    padding: '0 32px',
     cursor: 'pointer',
-    minWidth: '118px',
+    flexShrink: 0,
+    boxShadow: '0 4px 12px rgba(232,72,74,0.3)',
   },
   guestPopover: {
     position: 'fixed',

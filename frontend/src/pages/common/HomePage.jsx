@@ -129,7 +129,7 @@ function buildImageVariant(url, seedSuffix) {
 
 function PromoEventCard({ banner }) {
   return (
-    <article style={s.promoItem} className="tz-lift-soft">
+    <article style={s.promoItem} className="tz-lift-soft tz-promo-card">
       <div style={{ ...s.promoVisualShell, background: banner.gradient }}>
         <div>
           <p style={s.promoLead}>{banner.lead}</p>
@@ -138,7 +138,7 @@ function PromoEventCard({ banner }) {
           <p style={s.promoDate}>{banner.date}</p>
         </div>
         <div style={{ ...s.promoCircle, background: banner.circle }}>
-          <img src={banner.imageUrl} alt={banner.subtitle} style={s.promoCircleImage} />
+          <img src={banner.imageUrl} alt={banner.subtitle} style={s.promoCircleImage} className="tz-promo-image" />
         </div>
       </div>
     </article>
@@ -303,6 +303,10 @@ export default function HomePage() {
         .tz-lift-soft { transition: transform .22s ease, box-shadow .22s ease; }
         .tz-lift-soft:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.12); }
         .tz-horizontal::-webkit-scrollbar { display: none; }
+        .tz-promo-card:hover .tz-promo-image { transform: scale(1.05); }
+        .tz-promo-image { transition: transform 0.3s ease; }
+        .tz-theme-orb-wrap:hover .tz-theme-orb { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); border-color: ${C.primary}; }
+        .tz-theme-orb { transition: all 0.2s ease; }
         @keyframes tz-marquee {
           from { transform: translateX(0); }
           to { transform: translateX(-50%); }
@@ -331,8 +335,8 @@ export default function HomePage() {
             <div style={s.themeWrap}>
               <div style={s.themeTrack} className="tz-theme-track">
                 {themeLoop.map((theme, idx) => (
-                  <button key={`${theme.label}-${idx}`} style={s.themeChip} onClick={() => navigate('/lodgings')}>
-                    <span style={s.themeOrb}><span style={s.themeOrbEmoji}>{theme.emoji}</span></span>
+                  <button key={`${theme.label}-${idx}`} style={s.themeChip} className="tz-theme-orb-wrap" onClick={() => navigate('/lodgings')}>
+                    <span style={s.themeOrb} className="tz-theme-orb"><span style={s.themeOrbEmoji}>{theme.emoji}</span></span>
                     <span style={s.themeLabel}>{theme.label}</span>
                   </button>
                 ))}
@@ -492,11 +496,12 @@ const s = {
   },
   heroRight: { minWidth: 0 },
   searchShell: {
-    background: '#FFFFFFDD',
-    border: '1px solid #F2E5E5',
-    borderRadius: '20px',
-    padding: '16px',
-    boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
+    background: 'rgba(255, 255, 255, 0.45)', // more transparent to show gradient/glow
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255, 255, 255, 0.8)',
+    borderRadius: '24px',
+    padding: '20px',
+    boxShadow: '0 24px 64px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.04)',
   },
   themeWrap: {
     marginTop: '16px',
@@ -521,15 +526,15 @@ const s = {
     cursor: 'pointer',
   },
   themeOrb: {
-    width: '62px',
-    height: '62px',
-    borderRadius: '999px',
-    background: 'radial-gradient(circle at 30% 30%, #FFFFFF 0%, #F7F7F7 75%)',
+    width: '68px',
+    height: '68px',
+    borderRadius: '24px',
+    background: '#FFFFFF',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '1px solid #ECECEC',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(0,0,0,0.04)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
   },
   themeOrbEmoji: {
     fontSize: '30px',
@@ -578,13 +583,15 @@ const s = {
   },
   promoItem: { minWidth: '380px', flexShrink: 0 },
   promoVisualShell: {
-    borderRadius: '16px',
-    minHeight: '152px',
-    padding: '14px 16px',
+    borderRadius: '24px',
+    minHeight: '172px',
+    padding: '24px 28px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: '10px',
+    gap: '16px',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+    border: '1px solid rgba(255,255,255,0.6)',
   },
   promoLead: { margin: 0, color: '#5A5A5A', fontSize: '10px', fontWeight: 700 },
   promoTitle: {
