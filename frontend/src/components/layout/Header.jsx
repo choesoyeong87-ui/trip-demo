@@ -148,12 +148,79 @@ export default function Header() {
               </div>
               {menuOpen && (
                 <div style={s.dropdown}>
-                  <div style={s.dropdownUser}>
-                    <strong style={{ fontSize: '14px', fontWeight: '600', color: C.text }}>{user.name}</strong>
-                    <span style={{ fontSize: '12px', color: C.textSub, marginTop: '2px' }}>{user.email}</span>
+                  <div style={s.dropdownHeader}>
+                    <div style={s.dropdownUserName}>
+                      {user.name}
+                      <span style={{ color: '#ccc' }}>›</span>
+                    </div>
+
+                    <div style={s.dropdownGradeCard}>
+                      <div style={s.dropdownGradeTop}>
+                        <span style={s.dropdownGradeText}>Basic</span>
+                        <span style={s.dropdownBenefitsBtn}>혜택 보기 ›</span>
+                      </div>
+                      <div style={s.dropdownGradeDesc}>
+                        <span style={{ color: '#8A7DF5', fontWeight: '700' }}>3번 더 이용하면</span> 다음 등급 혜택 시작!
+                      </div>
+                    </div>
+
+                    <div style={s.dropdownBenefitLinks}>
+                      <div style={s.dropdownBenefitItem}>포인트</div>
+                      <div style={s.dropdownBenefitDivider} />
+                      <div style={s.dropdownBenefitItem}>쿠폰</div>
+                    </div>
                   </div>
-                  <div style={s.hr} />
-                  <button onClick={handleLogout} style={s.logoutBtn}>로그아웃</button>
+
+                  <ul style={s.dropdownMenu}>
+                    {[
+                      { label: '예약 내역', to: '/my/bookings' },
+                      { label: '최근 본 상품', to: '#' },
+                      { label: '찜 목록', to: '#' }
+                    ].map(m => (
+                      <li key={m.label}>
+                        <Link to={m.to} style={s.dropdownMenuItem} onClick={() => setMenuOpen(false)}>{m.label}</Link>
+                      </li>
+                    ))}
+
+                    <li><div style={s.dropdownMenuSection} /></li>
+                    <li><div style={s.dropdownMenuHeader}>모든 여행</div></li>
+
+                    {[
+                      { label: '국내숙소', to: '/lodgings' },
+                      { label: '해외숙소', to: '#' },
+                      { label: '패키지 여행', to: '#', new: true },
+                      { label: '항공', to: '#' },
+                      { label: '항공+숙소', to: '#' },
+                      { label: '레저·티켓', to: '#' },
+                      { label: '렌터카', to: '#' },
+                      { label: '공간대여', to: '#' },
+                    ].map(m => (
+                      <li key={m.label}>
+                        <Link to={m.to} style={s.dropdownMenuItem} onClick={() => setMenuOpen(false)}>
+                          {m.label}
+                          {m.new && <span style={s.badgeNew}>new</span>}
+                        </Link>
+                      </li>
+                    ))}
+
+                    <li><div style={s.dropdownMenuSection} /></li>
+
+                    {[
+                      { label: '이벤트', to: '#' },
+                      { label: '고객센터', to: '/support' },
+                      { label: '설정', to: '#' },
+                    ].map(m => (
+                      <li key={m.label}>
+                        <Link to={m.to} style={s.dropdownMenuItem} onClick={() => setMenuOpen(false)}>{m.label}</Link>
+                      </li>
+                    ))}
+                    <li><div style={s.dropdownMenuSection} /></li>
+                    <li>
+                      <button style={{ ...s.dropdownMenuItem, width: '100%', background: 'none', border: 'none', textAlign: 'left', fontFamily: 'inherit' }} onClick={handleLogout}>
+                        로그아웃
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
@@ -307,28 +374,108 @@ const s = {
     top: '44px',
     right: 0,
     background: '#fff',
-    border: `1px solid #E2E2E0`,
-    borderRadius: '10px',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-    padding: '6px 0',
-    minWidth: '180px',
+    border: '1px solid #EAEAEA',
+    borderRadius: '16px',
+    boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
+    width: '320px',
     zIndex: 200,
+    overflowY: 'auto',
+    maxHeight: 'calc(100vh - 80px)',
   },
-  dropdownUser: {
+  dropdownHeader: {
+    padding: '24px 20px 10px',
+  },
+  dropdownUserName: {
+    fontSize: '20px',
+    fontWeight: '800',
+    color: '#333',
     display: 'flex',
-    flexDirection: 'column',
-    padding: '12px 16px 10px',
-  },
-  hr: { height: '1px', background: '#EEEEEC', margin: '4px 0' },
-  logoutBtn: {
-    width: '100%',
-    textAlign: 'left',
-    padding: '9px 16px',
-    background: 'none',
-    border: 'none',
-    fontSize: '13px',
-    color: C.textSub,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '16px',
     cursor: 'pointer',
+  },
+  dropdownGradeCard: {
+    background: '#F5F5FC',
+    borderRadius: '12px',
+    padding: '16px',
+    marginBottom: '12px',
+  },
+  dropdownGradeTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '8px',
+  },
+  dropdownGradeText: {
+    fontSize: '18px',
+    fontWeight: '800',
+    color: '#8A7DF5',
+  },
+  dropdownBenefitsBtn: {
+    fontSize: '13px',
+    color: '#8A7DF5',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  dropdownGradeDesc: {
+    fontSize: '13px',
+    color: '#555',
+    fontWeight: '500',
+  },
+  dropdownBenefitLinks: {
+    display: 'flex',
+    border: '1px solid #EFEFEF',
+    borderRadius: '8px',
+  },
+  dropdownBenefitItem: {
+    flex: 1,
+    textAlign: 'center',
+    padding: '12px 0',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#555',
+    cursor: 'pointer',
+  },
+  dropdownBenefitDivider: {
+    width: '1px',
+    background: '#EFEFEF',
+    margin: '12px 0',
+  },
+  dropdownMenu: {
+    listStyle: 'none',
+    margin: 0,
+    padding: '0 0 12px 0',
+  },
+  dropdownMenuItem: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '12px 20px',
+    fontSize: '15px',
+    fontWeight: '500',
+    color: '#333',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
+  dropdownMenuSection: {
+    borderTop: '1px solid #F0F0F0',
+    margin: '4px 0',
+  },
+  dropdownMenuHeader: {
+    padding: '12px 20px 8px',
+    fontSize: '12px',
+    fontWeight: '700',
+    color: '#999',
+  },
+  badgeNew: {
+    background: '#FFE0E0',
+    color: '#E8484A',
+    fontSize: '11px',
+    fontWeight: '700',
+    padding: '2px 6px',
+    borderRadius: '4px',
+    marginLeft: '8px',
   },
   mobilePanel: {
     display: 'none',
