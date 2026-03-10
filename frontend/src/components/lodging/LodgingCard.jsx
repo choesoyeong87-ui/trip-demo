@@ -9,7 +9,12 @@ export default function LodgingCard({ lodging }) {
 
   return (
     <div
-      style={s.card}
+      style={{
+        ...s.card,
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 16px 32px rgba(0,0,0,0.1)' : '0 4px 12px rgba(0,0,0,0.05)',
+        borderColor: hovered ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.04)',
+      }}
       onClick={() => navigate(`/lodgings/${lodgingId}`)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -41,10 +46,11 @@ const s = {
   card: {
     cursor: 'pointer',
     background: '#FFFFFF',
-    border: '1px solid #DEE2E6',
-    borderRadius: '12px',
+    border: '1px solid rgba(0,0,0,0.04)',
+    borderRadius: '16px',
     overflow: 'hidden',
-    boxShadow: '0 8px 18px rgba(0,0,0,0.06)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+    transition: 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease',
   },
   imgWrap: {
     overflow: 'hidden',

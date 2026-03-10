@@ -242,9 +242,10 @@ export default function LodgingListPage() {
                   onClick={() => setSort(option.value)}
                   style={{
                     ...s.sortBtn,
-                    background: sort === option.value ? C.text : C.bg,
-                    color: sort === option.value ? '#fff' : C.textSub,
-                    borderColor: sort === option.value ? C.text : C.border,
+                    background: sort === option.value ? '#1F2530' : '#FFFFFF',
+                    color: sort === option.value ? '#fff' : '#5D6778',
+                    borderColor: sort === option.value ? '#1F2530' : '#E3E6EC',
+                    boxShadow: sort === option.value ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
                   }}
                 >
                   {option.label}
@@ -366,10 +367,10 @@ const s = {
   },
   mapFrame: {
     position: 'relative',
-    borderRadius: '18px',
+    borderRadius: '24px',
     overflow: 'hidden',
     border: `1px solid ${C.borderLight}`,
-    boxShadow: '0 14px 34px rgba(0,0,0,0.12)',
+    boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
     height: '100%',
   },
   mapOverlayTop: {
@@ -437,12 +438,13 @@ const s = {
   count: { fontSize: '16px', fontWeight: '400', color: C.textSub },
   sortGroup: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
   sortBtn: {
-    padding: '7px 16px',
+    padding: '8px 18px',
     border: '1px solid',
-    borderRadius: '20px',
-    fontSize: '13px',
-    fontWeight: '500',
+    borderRadius: '999px',
+    fontSize: '14px',
+    fontWeight: '700',
     cursor: 'pointer',
+    transition: 'all 0.2s ease',
   },
   grid: {
     display: 'grid',
