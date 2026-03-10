@@ -19,11 +19,30 @@ TripZone는 숙소 탐색/예약/문의 흐름을 빠르게 시연할 수 있도
 ## Project Structure
 
 ```text
-tripzone/
-  frontend/                # React demo app
-  backend/tripzone-backend # Spring Boot API
-  frontend/mock/           # json-server db/routes
-  doc/                     # tasks/context/workflow docs
+trip-demo/
+├── backend/
+│   └── tripzone-backend/      # Spring Boot API
+│       ├── pom.xml
+│       └── src/main/java/com/tripzone/
+│           ├── config/        # Security & Web configuration
+│           ├── controller/    # REST API endpoints
+│           ├── domain/        # JPA Entities
+│           ├── dto/           # Data Transfer Objects
+│           ├── repository/    # Spring Data JPA Repositories
+│           └── service/       # Business logic layer
+└── frontend/                  # React demo app
+    ├── package.json
+    ├── mock/                  # json-server db/routes
+    ├── public/                # Static assets
+    └── src/
+        ├── api/               # API integration (Axios calls)
+        ├── components/        # Reusable UI components
+        ├── constants/         # Role/Type constants
+        ├── hooks/             # Custom React hooks
+        ├── pages/             # Page components by role
+        ├── router/            # React Router configuration
+        ├── store/             # Global state
+        └── styles/            # Design tokens
 ```
 
 ## Quick Start (Demo)
