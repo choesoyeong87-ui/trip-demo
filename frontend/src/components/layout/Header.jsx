@@ -153,25 +153,32 @@ export default function Header() {
               {menuOpen && (
                 <div style={s.dropdown}>
                   <div style={s.dropdownHeader}>
-                    <div style={s.dropdownUserName}>
-                      {user.name}
-                      <span style={{ color: '#ccc' }}>›</span>
-                    </div>
+                    <Link to="/mypage" style={s.dropdownUserName} onClick={() => setMenuOpen(false)}>
+                      <span>{user.name}</span>
+                      <span style={s.dropdownUserArrow}>›</span>
+                    </Link>
 
                     <div style={s.dropdownGradeCard}>
                       <div style={s.dropdownGradeTop}>
                         <span style={s.dropdownGradeText}>Basic</span>
-                        <span style={s.dropdownBenefitsBtn}>혜택 보기 ›</span>
+                        <span style={s.dropdownBenefitsBtn}>혜택 안내</span>
                       </div>
                       <div style={s.dropdownGradeDesc}>
-                        <span style={{ color: '#8A7DF5', fontWeight: '700' }}>3번 더 이용하면</span> 다음 등급 혜택 시작!
+                        <span style={s.dropdownGradeHighlight}>3번 더 예약하면</span>
+                        <br />다음 등급 쿠폰팩 지급!
                       </div>
                     </div>
 
                     <div style={s.dropdownBenefitLinks}>
-                      <div style={s.dropdownBenefitItem}>포인트</div>
+                      <div style={s.dropdownBenefitItem}>
+                        <div style={s.benefitLabel}>포인트</div>
+                        <div style={s.benefitValue}>0</div>
+                      </div>
                       <div style={s.dropdownBenefitDivider} />
-                      <div style={s.dropdownBenefitItem}>쿠폰</div>
+                      <div style={s.dropdownBenefitItem}>
+                        <div style={s.benefitLabel}>쿠폰</div>
+                        <div style={s.benefitValue}>1</div>
+                      </div>
                     </div>
                   </div>
 
@@ -408,74 +415,106 @@ const s = {
     position: 'absolute',
     top: '56px',
     right: 0,
-    background: '#fff',
-    border: '1px solid #EAEAEA',
-    borderRadius: '16px',
-    boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
+    background: 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(24px)',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    borderRadius: '20px',
+    boxShadow: '0 16px 40px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,1)',
     width: '320px',
     zIndex: 200,
     overflowY: 'auto',
     maxHeight: 'calc(100vh - 80px)',
   },
   dropdownHeader: {
-    padding: '24px 20px 10px',
+    padding: '24px 20px 16px',
   },
   dropdownUserName: {
     fontSize: '20px',
     fontWeight: '800',
-    color: '#333',
+    color: '#222',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: '16px',
+    marginBottom: '20px',
     cursor: 'pointer',
+    textDecoration: 'none',
+  },
+  dropdownUserArrow: {
+    color: '#E8484A',
+    fontSize: '24px',
+    lineHeight: 1,
+    fontWeight: 300,
   },
   dropdownGradeCard: {
-    background: '#F5F5FC',
-    borderRadius: '12px',
-    padding: '16px',
-    marginBottom: '12px',
+    position: 'relative',
+    background: 'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)',
+    border: '1px solid #FFEBEB',
+    borderRadius: '16px',
+    padding: '16px 20px',
+    marginBottom: '16px',
+    boxShadow: '0 4px 12px rgba(232, 72, 74, 0.05)',
   },
   dropdownGradeTop: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '8px',
+    marginBottom: '6px',
   },
   dropdownGradeText: {
     fontSize: '18px',
     fontWeight: '800',
-    color: '#8A7DF5',
+    color: '#E8484A',
+    letterSpacing: '-0.02em',
   },
   dropdownBenefitsBtn: {
-    fontSize: '13px',
-    color: '#8A7DF5',
+    fontSize: '12px',
+    color: '#777',
     fontWeight: '600',
+    background: '#F0F0F0',
+    padding: '4px 10px',
+    borderRadius: '999px',
     cursor: 'pointer',
   },
   dropdownGradeDesc: {
     fontSize: '13px',
-    color: '#555',
+    color: '#666',
     fontWeight: '500',
+    lineHeight: 1.4,
+  },
+  dropdownGradeHighlight: {
+    color: '#D13D3F',
+    fontWeight: '700',
   },
   dropdownBenefitLinks: {
     display: 'flex',
-    border: '1px solid #EFEFEF',
-    borderRadius: '8px',
+    background: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: '12px',
+    border: '1px solid #F0E8E8',
   },
   dropdownBenefitItem: {
     flex: 1,
-    textAlign: 'center',
-    padding: '12px 0',
-    fontSize: '14px',
-    fontWeight: '600',
-    color: '#555',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '14px 0',
     cursor: 'pointer',
+  },
+  benefitLabel: {
+    fontSize: '12px',
+    color: '#888',
+    fontWeight: '600',
+    marginBottom: '4px',
+  },
+  benefitValue: {
+    fontSize: '16px',
+    color: '#333',
+    fontWeight: '800',
   },
   dropdownBenefitDivider: {
     width: '1px',
-    background: '#EFEFEF',
-    margin: '12px 0',
+    background: '#F0E8E8',
+    margin: '16px 0',
   },
   dropdownMenu: {
     listStyle: 'none',
