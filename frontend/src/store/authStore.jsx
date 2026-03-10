@@ -7,9 +7,10 @@ export function AuthProvider({ children }) {
 
   const login = (userData) => setUser(userData);
   const logout = () => setUser(null);
+  const updateCurrentUser = (data) => setUser(prev => prev ? { ...prev, ...data } : null);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );

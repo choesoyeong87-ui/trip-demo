@@ -44,7 +44,7 @@ function BookingsList({ bookings }) {
   );
 }
 
-function MyInfoSection({ user, logout }) {
+function MyInfoSection({ user, logout, updateCurrentUser }) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user.name || '',
@@ -60,10 +60,9 @@ function MyInfoSection({ user, logout }) {
   const handleSave = async () => {
     try {
       await updateUser(user.id || 1, { name: formData.name });
+      updateCurrentUser({ name: formData.name });
       alert('정보가 성공적으로 저장되었습니다.');
       setIsEditing(false);
-      // user 객체는 전역 store 또는 context 업데이트 필요하지만 
-      // 이 데모에선 UI상 저장 완료 피드백만 제공.
     } catch (err) {
       alert('정보 저장에 실패했습니다.');
     }
@@ -227,7 +226,7 @@ function EmptyView({ title }) {
 }
 
 export default function MyPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateCurrentUser } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState('bookings');
   const [bookings, setBookings] = useState([]);
@@ -299,7 +298,7 @@ export default function MyPage() {
                 {USER_TABS.find(t => t.key === tab)?.label}
               </h2>
               {tab === 'bookings' && <BookingsList bookings={bookings} />}
-              {tab === 'myinfo' && <MyInfoSection user={user} logout={handleLogout} />}
+              {tab === 'myinfo' && <MyInfoSection user={user} logout={handleLogout} updateCurrentUser={updateCurrentUser} />}
               {tab === 'settings' && <SettingsSection user={user} />}
               {['wishlist', 'points', 'coupons'].includes(tab) && (
                 <EmptyView title={USER_TABS.find(t => t.key === tab)?.label} />

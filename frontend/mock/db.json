@@ -252,7 +252,7 @@
   "users": [
     {
       "id": 1,
-      "name": "일반유저",
+      "name": "K",
       "email": "user@test.com",
       "role": "USER"
     },
