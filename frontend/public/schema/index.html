@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripZone DB Schema Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="schema-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          <span>TripZone Schema Dashboard</span>
+        </div>
+        <div class="topbar-note">REFERENCE / 확정 스키마 아님</div>
+      </header>
+
+      <main class="schema-main">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Database Reference</p>
+            <h1>팀원들이 보기 쉬운 형태로 재구성한 확장형 DB 명세 대시보드</h1>
+            <p class="hero-subtitle">
+              현재 백엔드 확정 스키마가 아니라, 나중에 기능 확장 시 참고하기 위한 Oracle DDL 레퍼런스입니다.
+            </p>
+            <div class="hero-tags">
+              <span>Member</span>
+              <span>Accommodation</span>
+              <span>Booking</span>
+              <span>Coupon</span>
+              <span>Inquiry</span>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <div class="metric-card">
+              <strong>17</strong>
+              <span>Core tables</span>
+            </div>
+            <div class="metric-card">
+              <strong>6</strong>
+              <span>Domain groups</span>
+            </div>
+            <div class="metric-card">
+              <strong>FK</strong>
+              <span>Role-based relation map</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Overview</p>
+            <h2>도메인 기준으로 보면 구조가 훨씬 잘 보입니다</h2>
+            <p>회원, 숙소, 예약, 혜택, 운영, 문의 도메인으로 나누어 보는 것이 가장 빠릅니다.</p>
+          </div>
+          <div class="domain-grid">
+            <article class="domain-card">
+              <span class="domain-kicker">Membership</span>
+              <h3>회원 / 등급 / 호스트</h3>
+              <p>MEMBER_GRADE, MEMBER, MEMBER_AUTH, HOST_PROFILE</p>
+            </article>
+            <article class="domain-card">
+              <span class="domain-kicker">Lodging</span>
+              <h3>숙소 / 객실 / 이미지</h3>
+              <p>ACCOMMODATION, ROOM, ACCOMMODATION_IMAGE</p>
+            </article>
+            <article class="domain-card">
+              <span class="domain-kicker">Benefits</span>
+              <h3>쿠폰 / 마일리지</h3>
+              <p>COUPON, USER_COUPON, MILEAGE_HISTORY</p>
+            </article>
+            <article class="domain-card">
+              <span class="domain-kicker">Booking</span>
+              <h3>예약 / 결제 / 리뷰 / 찜</h3>
+              <p>RESERVATION, PAYMENT, REVIEW, WISHLIST</p>
+            </article>
+            <article class="domain-card">
+              <span class="domain-kicker">Inquiry</span>
+              <h3>문의방 / 메시지</h3>
+              <p>INQUIRY_ROOM, INQUIRY_MESSAGE</p>
+            </article>
+            <article class="domain-card">
+              <span class="domain-kicker">Ops</span>
+              <h3>공지 / 운영</h3>
+              <p>NOTICE, PERSISTENT_LOGINS</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Relation Map</p>
+            <h2>핵심 관계는 이 흐름만 이해하면 됩니다</h2>
+          </div>
+          <div class="relation-board">
+            <div class="relation-column">
+              <div class="relation-node">MEMBER_GRADE</div>
+              <div class="relation-node">MEMBER</div>
+              <div class="relation-node">HOST_PROFILE</div>
+            </div>
+            <div class="relation-arrow-stack">
+              <span>등급</span>
+              <span>호스트 승인</span>
+              <span>운영 권한</span>
+            </div>
+            <div class="relation-column">
+              <div class="relation-node accent">ACCOMMODATION</div>
+              <div class="relation-node accent">ROOM</div>
+              <div class="relation-node accent">ACCOMMODATION_IMAGE</div>
+            </div>
+            <div class="relation-arrow-stack">
+              <span>예약 단위</span>
+              <span>혜택 적용</span>
+              <span>리뷰/문의 연결</span>
+            </div>
+            <div class="relation-column">
+              <div class="relation-node strong">RESERVATION</div>
+              <div class="relation-node">PAYMENT</div>
+              <div class="relation-node">REVIEW</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Membership</p>
+            <h2>회원 / 등급 / 호스트 구조</h2>
+          </div>
+          <div class="table-grid">
+            <article class="table-card">
+              <div class="table-header">
+                <h3>MEMBER_GRADE</h3>
+                <span class="badge">등급 기준</span>
+              </div>
+              <p class="table-desc">회원 등급과 혜택 기준을 관리하는 마스터 테이블</p>
+              <table>
+                <tr><th>PK</th><td>GRADE_NO</td></tr>
+                <tr><th>핵심 컬럼</th><td>GRADE_CODE, GRADE_NAME, MIN_TOTAL_AMOUNT, MILEAGE_RATE, STATUS</td></tr>
+                <tr><th>용도</th><td>등급 계산, 혜택 기준, 정렬 순서 관리</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>MEMBER</h3>
+                <span class="badge">회원</span>
+              </div>
+              <p class="table-desc">기본 회원 정보와 보유 마일리지, 활성 여부 관리</p>
+              <table>
+                <tr><th>PK</th><td>USER_NO</td></tr>
+                <tr><th>FK</th><td>GRADE_NO → MEMBER_GRADE</td></tr>
+                <tr><th>핵심 컬럼</th><td>USER_ID, USER_NAME, PHONE, MILEAGE, EMAIL, ENABLED</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>HOST_PROFILE</h3>
+                <span class="badge">호스트</span>
+              </div>
+              <p class="table-desc">사업자 정보와 승인 상태를 별도 관리하는 호스트 프로필</p>
+              <table>
+                <tr><th>PK</th><td>HOST_NO</td></tr>
+                <tr><th>FK</th><td>USER_NO → MEMBER, APPROVED_BY → MEMBER</td></tr>
+                <tr><th>핵심 컬럼</th><td>BUSINESS_NAME, BUSINESS_NUMBER, APPROVAL_STATUS, APPROVED_AT</td></tr>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Lodging</p>
+            <h2>숙소와 객실은 분리되어 있습니다</h2>
+          </div>
+          <div class="table-grid">
+            <article class="table-card wide">
+              <div class="table-header">
+                <h3>ACCOMMODATION</h3>
+                <span class="badge">숙소 공통 정보</span>
+              </div>
+              <p class="table-desc">숙소명, 주소, 좌표, 설명, 체크인/아웃 시간 등 공통 정보 관리</p>
+              <table>
+                <tr><th>PK</th><td>ACCOMMODATION_NO</td></tr>
+                <tr><th>FK</th><td>HOST_NO → HOST_PROFILE</td></tr>
+                <tr><th>핵심 컬럼</th><td>ACCOMMODATION_NAME, ACCOMMODATION_TYPE, ADDRESS, LATITUDE, LONGITUDE, STATUS</td></tr>
+                <tr><th>포인트</th><td>예약 대상 자체가 아니라 “숙소 공통 정보” 계층</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>ROOM</h3>
+                <span class="badge">예약 단위</span>
+              </div>
+              <p class="table-desc">실제 예약 단위가 되는 객실 테이블</p>
+              <table>
+                <tr><th>PK</th><td>ROOM_NO</td></tr>
+                <tr><th>FK</th><td>ACCOMMODATION_NO → ACCOMMODATION</td></tr>
+                <tr><th>핵심 컬럼</th><td>ROOM_NAME, MAX_GUEST_COUNT, PRICE_PER_NIGHT, ROOM_COUNT, STATUS</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>ACCOMMODATION_IMAGE</h3>
+                <span class="badge">이미지</span>
+              </div>
+              <p class="table-desc">숙소 대표 이미지와 정렬 순서를 관리</p>
+              <table>
+                <tr><th>PK</th><td>IMAGE_NO</td></tr>
+                <tr><th>FK</th><td>ACCOMMODATION_NO → ACCOMMODATION</td></tr>
+                <tr><th>핵심 컬럼</th><td>IMAGE_URL, IS_THUMBNAIL, SORT_ORDER</td></tr>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Booking</p>
+            <h2>예약 흐름의 중심 테이블</h2>
+          </div>
+          <div class="table-grid">
+            <article class="table-card wide">
+              <div class="table-header">
+                <h3>RESERVATION</h3>
+                <span class="badge">핵심</span>
+              </div>
+              <p class="table-desc">회원, 객실, 쿠폰, 숙박 일정, 가격 정보를 통합하는 핵심 예약 테이블</p>
+              <table>
+                <tr><th>PK</th><td>RESERVATION_NO</td></tr>
+                <tr><th>FK</th><td>USER_NO → MEMBER / ROOM_NO → ROOM / USER_COUPON_NO → USER_COUPON</td></tr>
+                <tr><th>핵심 컬럼</th><td>CHECK_IN_DATE, CHECK_OUT_DATE, GUEST_COUNT, PRICE_PER_NIGHT, TOTAL_PRICE, STATUS</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>PAYMENT</h3>
+                <span class="badge">결제</span>
+              </div>
+              <p class="table-desc">예약 기준 1:1 결제 정보 관리</p>
+              <table>
+                <tr><th>PK</th><td>PAYMENT_NO</td></tr>
+                <tr><th>FK</th><td>RESERVATION_NO → RESERVATION</td></tr>
+                <tr><th>핵심 컬럼</th><td>ORDER_ID, PAYMENT_KEY, PAYMENT_AMOUNT, PAYMENT_METHOD, PAYMENT_STATUS</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>REVIEW / WISHLIST</h3>
+                <span class="badge">확장</span>
+              </div>
+              <p class="table-desc">예약 이후 사용자 행동 데이터</p>
+              <table>
+                <tr><th>REVIEW</th><td>RESERVATION_NO, USER_NO, ACCOMMODATION_NO, RATING, CONTENT</td></tr>
+                <tr><th>WISHLIST</th><td>USER_NO, ACCOMMODATION_NO</td></tr>
+                <tr><th>용도</th><td>리뷰, 찜, 사용자 만족도 확장</td></tr>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Benefits</p>
+            <h2>쿠폰과 마일리지는 별도 이력 구조를 갖습니다</h2>
+          </div>
+          <div class="table-grid">
+            <article class="table-card">
+              <div class="table-header">
+                <h3>COUPON</h3>
+                <span class="badge">쿠폰 마스터</span>
+              </div>
+              <p class="table-desc">쿠폰 종류와 사용 조건을 정의하는 마스터</p>
+              <table>
+                <tr><th>PK</th><td>COUPON_NO</td></tr>
+                <tr><th>핵심 컬럼</th><td>COUPON_CODE, DISCOUNT_TYPE, DISCOUNT_VALUE, START_DATE, END_DATE, STATUS</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>USER_COUPON</h3>
+                <span class="badge">회원 쿠폰</span>
+              </div>
+              <p class="table-desc">회원에게 발급된 개별 쿠폰 상태 관리</p>
+              <table>
+                <tr><th>PK</th><td>USER_COUPON_NO</td></tr>
+                <tr><th>FK</th><td>USER_NO → MEMBER / COUPON_NO → COUPON</td></tr>
+                <tr><th>핵심 컬럼</th><td>ISSUED_AT, USED_AT, EXPIRED_AT, STATUS</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>MILEAGE_HISTORY</h3>
+                <span class="badge">포인트 이력</span>
+              </div>
+              <p class="table-desc">적립/사용/만료/조정 이력을 별도 저장</p>
+              <table>
+                <tr><th>PK</th><td>MILEAGE_HISTORY_NO</td></tr>
+                <tr><th>FK</th><td>USER_NO / RESERVATION_NO / PAYMENT_NO</td></tr>
+                <tr><th>핵심 컬럼</th><td>CHANGE_TYPE, CHANGE_AMOUNT, BALANCE_AFTER, STATUS</td></tr>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <p class="eyebrow">Inquiry & Ops</p>
+            <h2>문의는 채팅형 구조, 공지는 운영형 구조입니다</h2>
+          </div>
+          <div class="table-grid">
+            <article class="table-card">
+              <div class="table-header">
+                <h3>INQUIRY_ROOM</h3>
+                <span class="badge">문의방</span>
+              </div>
+              <p class="table-desc">문의의 상위 스레드 역할을 하는 테이블</p>
+              <table>
+                <tr><th>PK</th><td>ROOM_NO</td></tr>
+                <tr><th>FK</th><td>USER_NO / ADMIN_USER_NO / ACCOMMODATION_NO</td></tr>
+                <tr><th>핵심 컬럼</th><td>TARGET_TYPE, INQUIRY_TYPE, TITLE, STATUS, LAST_MESSAGE_AT</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>INQUIRY_MESSAGE</h3>
+                <span class="badge">메시지</span>
+              </div>
+              <p class="table-desc">문의방 안의 실제 메시지 단위</p>
+              <table>
+                <tr><th>PK</th><td>MESSAGE_NO</td></tr>
+                <tr><th>FK</th><td>ROOM_NO → INQUIRY_ROOM / SENDER_USER_NO → MEMBER</td></tr>
+                <tr><th>핵심 컬럼</th><td>SENDER_TYPE, MESSAGE_CONTENT, IMAGE1~3, READ_YN, READ_AT</td></tr>
+              </table>
+            </article>
+            <article class="table-card">
+              <div class="table-header">
+                <h3>NOTICE</h3>
+                <span class="badge">운영 공지</span>
+              </div>
+              <p class="table-desc">관리자 작성 공지와 상태 관리</p>
+              <table>
+                <tr><th>PK</th><td>NOTICE_NO</td></tr>
+                <tr><th>FK</th><td>ADMIN_USER_NO → MEMBER</td></tr>
+                <tr><th>핵심 컬럼</th><td>TITLE, CONTENT, NOTICE_TYPE, IS_PINNED, VIEW_COUNT, STATUS</td></tr>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section class="section caution-section">
+          <div class="caution-card">
+            <p class="eyebrow">Caution</p>
+            <h2>이 페이지는 참고용입니다</h2>
+            <ul>
+              <li>현재 실제 백엔드 엔티티/JPA 구조와 1:1로 일치하는 확정 스키마가 아닙니다.</li>
+              <li>특히 현재 프로젝트 백엔드는 `users`, `lodgings`, `bookings`, `inquiries` 중심 MVP 구조입니다.</li>
+              <li>이 HTML은 화면 설계와 도메인 참고를 쉽게 하기 위한 시각화 대시보드입니다.</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

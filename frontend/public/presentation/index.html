@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripZone Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-one"></div>
+      <div class="ambient ambient-two"></div>
+
+      <header class="floating-ui">
+        <div class="brand-chip">
+          <span class="brand-dot"></span>
+          <span>TripZone Presentation</span>
+        </div>
+        <div class="slide-meta" id="slideMeta">
+          <span class="slide-meta-index" id="slideMetaIndex">01</span>
+          <span class="slide-meta-title" id="slideMetaTitle">Hook</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </header>
+
+      <nav class="slide-rail" id="slideRail" aria-label="Presentation navigation">
+        <button class="rail-dot active" data-target="hook" aria-label="Hook"></button>
+        <button class="rail-dot" data-target="problem" aria-label="Problem"></button>
+        <button class="rail-dot" data-target="insight" aria-label="Insight"></button>
+        <button class="rail-dot" data-target="solution" aria-label="Solution"></button>
+        <button class="rail-dot" data-target="roles" aria-label="Roles"></button>
+        <button class="rail-dot" data-target="flows" aria-label="Flows"></button>
+        <button class="rail-dot" data-target="ui" aria-label="UI"></button>
+        <button class="rail-dot" data-target="architecture" aria-label="Architecture"></button>
+        <button class="rail-dot" data-target="difference" aria-label="Difference"></button>
+        <button class="rail-dot" data-target="challenges" aria-label="Challenges"></button>
+        <button class="rail-dot" data-target="impact" aria-label="Impact"></button>
+        <button class="rail-dot" data-target="future" aria-label="Future"></button>
+        <button class="rail-dot" data-target="team" aria-label="Team"></button>
+        <button class="rail-dot" data-target="closing" aria-label="Closing"></button>
+      </nav>
+
+      <main class="presentation" id="presentation">
+        <section class="slide hero-slide active" id="hook" data-title="Hook">
+          <div class="section-frame hero-layout">
+            <div class="hero-copy reveal">
+              <p class="eyebrow">Travel platform storytelling deck</p>
+              <h1 class="hero-title">
+                예약은 단순합니다.
+                <br />
+                운영은 전혀 단순하지 않습니다.
+              </h1>
+              <p class="hero-subtitle">
+                TripZone는 사용자 화면만이 아니라
+                <strong>판매자 운영과 관리자 통제까지 함께 설계한 3-role 여행 플랫폼</strong>입니다.
+              </p>
+              <div class="hero-role-row">
+                <span class="role-pill user">User</span>
+                <span class="role-pill seller">Seller</span>
+                <span class="role-pill admin">Admin</span>
+              </div>
+              <div class="hero-signal-row">
+                <div class="signal-chip">
+                  <strong>Search</strong>
+                  <span>사용자 여정</span>
+                </div>
+                <div class="signal-chip">
+                  <strong>Manage</strong>
+                  <span>판매자 운영</span>
+                </div>
+                <div class="signal-chip">
+                  <strong>Control</strong>
+                  <span>관리자 통제</span>
+                </div>
+              </div>
+            </div>
+            <div class="hero-visual-col reveal">
+              <div class="hero-backdrop"></div>
+            <div class="hero-bottom-panel">
+              <div class="hero-meta-card hero-meta-wide">
+                <span class="mini-label">Platform Thesis</span>
+                <p>검색만 잘 되는 서비스는 많습니다.</p>
+                <p>운영까지 버티는 구조는 드뭅니다.</p>
+              </div>
+              <div class="hero-meta-card">
+                <span class="mini-label">Role-first</span>
+                <strong>3-role architecture</strong>
+                <p class="hero-meta-caption">사용자, 판매자, 관리자의 흐름을 하나의 구조로 정리합니다.</p>
+              </div>
+              <div class="hero-meta-card">
+                <span class="mini-label">Platform Story</span>
+                <strong class="hero-inline-title">Search → Manage → Control</strong>
+                  <div class="journey-tags">
+                    <span>숙소 탐색</span>
+                    <span>예약</span>
+                    <span>문의</span>
+                    <span>운영</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="problem" data-title="Problem">
+          <div class="section-frame split-layout">
+            <div class="copy-col reveal">
+              <p class="eyebrow">Problem</p>
+              <h2 class="section-title">여행 예약 서비스는 화면 하나로 설명되지 않습니다</h2>
+              <p class="section-subtitle">
+                사용자 편의만 중심에 두면 판매자 운영과 관리자 통제가 뒤엉키고, 플랫폼은 빠르게 복잡해집니다.
+              </p>
+              <div class="bullet-stack">
+                <div class="bullet-card">
+                  <strong>사용자 중심 설계의 한계</strong>
+                  <span>예약 경험은 좋아도 운영 흐름이 약해집니다.</span>
+                </div>
+                <div class="bullet-card">
+                  <strong>뒤늦은 판매자 기능 추가</strong>
+                  <span>상품 관리와 예약 대응이 분리되지 못합니다.</span>
+                </div>
+                <div class="bullet-card">
+                  <strong>관리자 구조 부재</strong>
+                  <span>문의, 승인, 정책 관리가 느슨해집니다.</span>
+                </div>
+              </div>
+            </div>
+            <div class="visual-col reveal">
+              <div class="problem-map">
+                <div class="problem-node">Search UI</div>
+                <div class="problem-node danger">Seller Ops</div>
+                <div class="problem-node danger">Admin Control</div>
+                <div class="problem-node">Booking Flow</div>
+                <div class="problem-wire wire-one"></div>
+                <div class="problem-wire wire-two"></div>
+                <div class="problem-wire wire-three"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="insight" data-title="Insight">
+          <div class="section-frame center-stage">
+            <div class="reveal">
+              <p class="eyebrow">Insight</p>
+              <h2 class="section-title">하나의 플랫폼 안에는 세 개의 일이 존재합니다</h2>
+              <p class="section-subtitle">User는 예약을, Seller는 운영을, Admin은 안정성을 관리합니다.</p>
+            </div>
+            <div class="orbit-diagram reveal">
+              <div class="orbit-core">TripZone</div>
+              <div class="orbit-card orbit-user">
+                <strong>User</strong>
+                <span>탐색 · 예약 · 리뷰</span>
+              </div>
+              <div class="orbit-card orbit-seller">
+                <strong>Seller</strong>
+                <span>등록 · 예약 관리 · 문의 대응</span>
+              </div>
+              <div class="orbit-card orbit-admin">
+                <strong>Admin</strong>
+                <span>승인 · 운영 · 정책 통제</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="solution" data-title="Solution">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">Solution</p>
+              <h2 class="section-title">TripZone는 역할 분리로 여행 플랫폼의 복잡함을 정리합니다</h2>
+              <p class="section-subtitle">검색, 운영, 통제를 하나의 제품 경험 안에서 연결했습니다.</p>
+            </div>
+            <div class="feature-grid reveal">
+              <article class="feature-card">
+                <div class="feature-icon">01</div>
+                <h3>Search</h3>
+                <p>사용자는 숙소를 빠르게 찾고 신뢰할 수 있는 정보로 예약합니다.</p>
+              </article>
+              <article class="feature-card">
+                <div class="feature-icon">02</div>
+                <h3>Manage</h3>
+                <p>판매자는 숙소, 객실, 예약, 문의를 하나의 흐름으로 운영합니다.</p>
+              </article>
+              <article class="feature-card">
+                <div class="feature-icon">03</div>
+                <h3>Control</h3>
+                <p>관리자는 승인, 문의, 사용자 상태를 통해 플랫폼 신뢰를 유지합니다.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="roles" data-title="Roles">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">3-Role Structure</p>
+              <h2 class="section-title">TripZone의 핵심 구조는 역할 분리입니다</h2>
+              <p class="section-subtitle">각 역할은 다른 책임과 다른 화면을 갖습니다.</p>
+            </div>
+            <div class="role-columns reveal">
+              <article class="role-column user">
+                <div class="role-topline">User</div>
+                <h3>여행자는 경험 중심</h3>
+                <ul>
+                  <li>숙소 탐색</li>
+                  <li>예약과 혜택 적용</li>
+                  <li>리뷰와 문의</li>
+                </ul>
+              </article>
+              <article class="role-column seller">
+                <div class="role-topline">Seller</div>
+                <h3>판매자는 운영 중심</h3>
+                <ul>
+                  <li>숙소 등록 및 수정</li>
+                  <li>예약 현황 관리</li>
+                  <li>판매자 문의 대응</li>
+                </ul>
+              </article>
+              <article class="role-column admin">
+                <div class="role-topline">Admin</div>
+                <h3>관리자는 통제 중심</h3>
+                <ul>
+                  <li>판매자 승인</li>
+                  <li>사용자/문의 관리</li>
+                  <li>운영 이슈 대응</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="flows" data-title="Flows">
+          <div class="section-frame process-layout">
+            <div class="reveal">
+              <p class="eyebrow">Product Flow</p>
+              <h2 class="section-title">TripZone는 역할마다 다른 여정을 제공합니다</h2>
+            </div>
+            <div class="process-bands">
+              <div class="process-lane reveal">
+                <div class="lane-title">User Journey</div>
+                <div class="lane-steps">
+                  <span>Search</span>
+                  <span>Detail</span>
+                  <span>Booking</span>
+                  <span>Review</span>
+                </div>
+              </div>
+              <div class="process-lane reveal">
+                <div class="lane-title">Seller Journey</div>
+                <div class="lane-steps">
+                  <span>Listing</span>
+                  <span>Room Setup</span>
+                  <span>Reservation Ops</span>
+                  <span>Inquiry Reply</span>
+                </div>
+              </div>
+              <div class="process-lane reveal">
+                <div class="lane-title">Admin Journey</div>
+                <div class="lane-steps">
+                  <span>Review</span>
+                  <span>Approve</span>
+                  <span>Monitor</span>
+                  <span>Control</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="ui" data-title="UI">
+          <div class="section-frame split-layout">
+            <div class="copy-col reveal">
+              <p class="eyebrow">UI Highlight</p>
+              <h2 class="section-title">화면은 기능 나열이 아니라 역할별 경험을 보여줍니다</h2>
+              <p class="section-subtitle">
+                TripZone는 검색, 숙소 상세, 예약, 문의, 관리자 콘솔까지 실제 서비스처럼 시연 가능한 수준으로 구성했습니다.
+              </p>
+              <div class="mini-stat-row">
+                <div class="mini-stat">
+                  <strong>User</strong>
+                  <span>예약 중심 UI</span>
+                </div>
+                <div class="mini-stat">
+                  <strong>Seller</strong>
+                  <span>운영 중심 UI</span>
+                </div>
+                <div class="mini-stat">
+                  <strong>Admin</strong>
+                  <span>통제 중심 UI</span>
+                </div>
+              </div>
+            </div>
+            <div class="ui-collage reveal">
+              <div class="ui-shot shot-large">
+                <div class="shot-label">Lodging Detail</div>
+                <div class="shot-screen detail-screen"></div>
+              </div>
+              <div class="ui-shot shot-small">
+                <div class="shot-label">Search</div>
+                <div class="shot-screen list-screen"></div>
+              </div>
+              <div class="ui-shot shot-small">
+                <div class="shot-label">Admin</div>
+                <div class="shot-screen admin-screen"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="architecture" data-title="Architecture">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">Architecture</p>
+              <h2 class="section-title">구조는 기술 스택보다 더 중요한 메시지입니다</h2>
+              <p class="section-subtitle">프론트, 역할 로직, API, 데이터 계층을 명확히 분리했습니다.</p>
+            </div>
+            <div class="architecture-board reveal">
+              <div class="arch-block">
+                <span class="arch-label">Presentation</span>
+                <strong>React / Vite UI</strong>
+                <p>User, Seller, Admin experience</p>
+              </div>
+              <div class="arch-arrow">→</div>
+              <div class="arch-block">
+                <span class="arch-label">Application</span>
+                <strong>Role-based flows</strong>
+                <p>Search, manage, control</p>
+              </div>
+              <div class="arch-arrow">→</div>
+              <div class="arch-block">
+                <span class="arch-label">Backend-ready</span>
+                <strong>API connection points</strong>
+                <p>Mock-first, API-ready</p>
+              </div>
+              <div class="arch-arrow">→</div>
+              <div class="arch-block">
+                <span class="arch-label">Data</span>
+                <strong>Bookings / Lodgings / Inquiries</strong>
+                <p>Role-oriented model design</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="difference" data-title="Difference">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">Difference</p>
+              <h2 class="section-title">TripZone는 단순 예약 화면 데모와 다릅니다</h2>
+            </div>
+            <div class="difference-banner reveal">
+              <strong>핵심 차이</strong>
+              <span>예약 UI를 넘어서 운영 가능한 플랫폼 구조까지 설명합니다.</span>
+            </div>
+            <div class="compare-grid reveal">
+              <div class="compare-card dull">
+                <h3>일반적인 팀 프로젝트</h3>
+                <ul>
+                  <li>사용자 예약 화면 중심</li>
+                  <li>운영 구조는 생략</li>
+                  <li>관리자/판매자 흐름 약함</li>
+                </ul>
+              </div>
+              <div class="compare-card highlight">
+                <h3>TripZone</h3>
+                <ul>
+                  <li>사용자, 판매자, 관리자 분리</li>
+                  <li>운영 가능한 구조 시연</li>
+                  <li>백엔드 연결 지점까지 고려</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="challenges" data-title="Challenges">
+          <div class="section-frame split-layout">
+            <div class="copy-col reveal">
+              <p class="eyebrow">Challenges Solved</p>
+              <h2 class="section-title">구현하면서 해결한 핵심 과제</h2>
+              <div class="stacked-panels">
+                <article class="panel-card">
+                  <strong>역할별 UX 분리</strong>
+                  <span>하나의 서비스지만 각 역할의 목적과 흐름은 다르게 설계</span>
+                </article>
+                <article class="panel-card">
+                  <strong>Mock to API-ready 구조</strong>
+                  <span>프론트는 시연 가능하게, 백엔드는 나중에 연결 가능하게 정리</span>
+                </article>
+                <article class="panel-card">
+                  <strong>운영 관점 UI 확장</strong>
+                  <span>관리자 액션, 판매자 문의, 예약 상세까지 실제 서비스 흐름 반영</span>
+                </article>
+              </div>
+            </div>
+            <div class="visual-col reveal">
+              <div class="challenge-board">
+                <div class="challenge-step">
+                  <span>Problem</span>
+                  <strong>기능은 많은데 구조는 쉽게 꼬인다</strong>
+                </div>
+                <div class="challenge-step">
+                  <span>Approach</span>
+                  <strong>역할별 흐름과 연결 포인트를 먼저 정리한다</strong>
+                </div>
+                <div class="challenge-step">
+                  <span>Result</span>
+                  <strong>시연 가능성과 확장 가능성을 동시에 확보</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="impact" data-title="Impact">
+          <div class="section-frame center-stage">
+            <div class="reveal">
+              <p class="eyebrow">Impact</p>
+              <h2 class="section-title">TripZone가 보여준 프로젝트 가치</h2>
+              <p class="section-subtitle">사용자 경험, 운영 구조, 협업 구조를 함께 설계한 점이 핵심입니다.</p>
+            </div>
+            <div class="impact-hero reveal">
+              <div class="impact-callout">
+                <span class="impact-kicker">Project Value</span>
+                <strong>하나의 예약 서비스가 아니라 운영 가능한 플랫폼 구조</strong>
+              </div>
+              <div class="impact-metrics">
+                <div class="impact-metric">
+                  <span class="metric-number">3</span>
+                  <span class="metric-label">Role architecture</span>
+                </div>
+                <div class="impact-metric">
+                  <span class="metric-number">4</span>
+                  <span class="metric-label">Core flows</span>
+                </div>
+                <div class="impact-metric">
+                  <span class="metric-number">API</span>
+                  <span class="metric-label">Ready structure</span>
+                </div>
+              </div>
+            </div>
+            <div class="impact-grid reveal">
+              <article class="impact-card">
+                <strong>Experience</strong>
+                <span>검색부터 예약까지 실제 서비스처럼 흐르는 UI</span>
+              </article>
+              <article class="impact-card">
+                <strong>Operations</strong>
+                <span>Seller와 Admin까지 포함한 운영 구조 시연</span>
+              </article>
+              <article class="impact-card">
+                <strong>Scalability</strong>
+                <span>Mock 기반이지만 API-ready 구조로 확장 가능</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="future" data-title="Future">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">Future</p>
+              <h2 class="section-title">다음 단계는 구조를 실제 서비스로 연결하는 것입니다</h2>
+            </div>
+            <div class="future-layout">
+              <div class="roadmap reveal">
+                <div class="roadmap-step active">
+                  <span>Now</span>
+                  <strong>Mock-first demo</strong>
+                </div>
+                <div class="roadmap-step">
+                  <span>Next</span>
+                  <strong>Role-based backend API</strong>
+                </div>
+                <div class="roadmap-step">
+                  <span>Then</span>
+                  <strong>Database integration</strong>
+                </div>
+                <div class="roadmap-step">
+                  <span>Future</span>
+                  <strong>Production-ready platform</strong>
+                </div>
+              </div>
+              <aside class="future-panel reveal">
+                <span class="mini-label">What scales next</span>
+                <strong>Mock에서 운영형 구조로 이동</strong>
+                <ul>
+                  <li>실제 역할 기반 API 연결</li>
+                  <li>DB 정합성과 운영 데이터 반영</li>
+                  <li>배포/권한/운영 정책 구조 확장</li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="team" data-title="Team">
+          <div class="section-frame">
+            <div class="reveal">
+              <p class="eyebrow">Team</p>
+              <h2 class="section-title">Who built TripZone</h2>
+              <p class="section-subtitle">이 섹션은 발표 직전 실제 이름과 담당 파트로 쉽게 교체할 수 있도록 구성했습니다.</p>
+            </div>
+            <div class="team-grid reveal">
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 1]</h3>
+                <p>[FRONTEND PART]</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 2]</h3>
+                <p>[BACKEND PART]</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 3]</h3>
+                <p>[DATABASE PART]</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 4]</h3>
+                <p>[PLANNING PART]</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 5]</h3>
+                <p>[UI/UX PART]</p>
+              </article>
+              <article class="team-card">
+                <div class="avatar-block"></div>
+                <h3>[TEAM MEMBER 6]</h3>
+                <p>[TESTING PART]</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide closing-slide" id="closing" data-title="Closing">
+          <div class="section-frame center-stage">
+            <div class="reveal">
+              <p class="eyebrow">Closing</p>
+              <h2 class="section-title">TripZone는 예약 화면이 아니라 운영 가능한 구조를 보여준 프로젝트입니다</h2>
+              <p class="section-subtitle">
+                사용자 경험, 판매자 운영, 관리자 통제를 함께 설계하면서
+                <strong>서비스 구조가 제품 품질을 만든다</strong>는 점을 확인했습니다.
+              </p>
+            </div>
+            <div class="closing-summary reveal">
+              <span>Problem</span>
+              <span>Structure</span>
+              <span>Implementation</span>
+              <span>Learning</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
