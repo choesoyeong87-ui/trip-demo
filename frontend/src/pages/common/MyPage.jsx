@@ -1,147 +1,136 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../../store/authStore';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { ROLES } from '../../constants/roles';
-import Badge from '../../components/common/Badge';
 import { getMyBookings } from '../../api/booking';
-import { getMyInquiries } from '../../api/inquiry';
-import { C, MAX_WIDTH, R, S } from '../../styles/tokens';
-import { INQUIRY_TYPE_LABELS } from '../../constants/inquiryTypes';
+import { benefitSnapshot } from '../../mock/benefitsData';
+import {
+  BookingsList,
+  CouponsSection,
+  GradeSection,
+  MyInfoSection,
+  PointsSection,
+  SettingsSection,
+  WishlistSection,
+} from '../../components/mypage/UserTabSections';
+import { C } from '../../styles/tokens';
 
 const USER_TABS = [
-  { key: 'bookings', label: '내 예약' },
-  { key: 'inquiries', label: '내 문의' },
+  { key: 'bookings', label: '예약 내역' },
+  { key: 'wishlist', label: '찜 목록' },
+  { key: 'grade', label: '등급 혜택' },
+  { key: 'points', label: '포인트' },
+  { key: 'coupons', label: '쿠폰' },
+  { key: 'myinfo', label: '내 정보 관리' },
+  { key: 'settings', label: '설정' },
 ];
+
 const SELLER_TABS = [
   { key: 'lodgings', label: '내 숙소', to: '/seller/lodgings' },
   { key: 'reservations', label: '예약 현황', to: '/seller/reservations' },
   { key: 'inquiries', label: '문의 관리', to: '/seller/inquiries' },
 ];
 
-function BookingsList({ bookings }) {
-  if (!bookings.length) return <p style={{ color: C.textSub }}>예약 내역이 없습니다.</p>;
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {bookings.map(b => (
-        <div key={b.bookingId} style={sCard.card}>
-          <img src={b.thumbnailUrl} alt={b.lodgingName} style={sCard.img} />
-          <div style={sCard.body}>
-            <div style={sCard.header}>
-              <p style={sCard.name}>{b.lodgingName}</p>
-              <Badge status={b.bookingStatus} />
-            </div>
-            <p style={sCard.meta}>{b.checkIn} ~ {b.checkOut} · {b.guests}명</p>
-            <p style={sCard.price}>{b.totalPrice.toLocaleString()}원</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function InquiriesList({ inquiries }) {
-  if (!inquiries.length) return <p style={{ color: C.textSub }}>문의 내역이 없습니다.</p>;
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      {inquiries.map(i => (
-        <div key={i.inquiryId} style={sCard.inquiryCard}>
-          <div style={sCard.inquiryTop}>
-            <span style={sCard.inquiryTitle}>{i.title}</span>
-            <Badge status={i.inquiryStatus} />
-          </div>
-          <p style={sCard.inquiryMeta}>{INQUIRY_TYPE_LABELS[i.inquiryType]} · {i.createdAt}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
+const roleLabelMap = {
+  [ROLES.USER]: '일반 사용자',
+  [ROLES.SELLER]: '판매자',
+  [ROLES.ADMIN]: '관리자',
+};
 
 export default function MyPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateCurrentUser } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState('bookings');
   const [bookings, setBookings] = useState([]);
-  const [inquiries, setInquiries] = useState([]);
+  // TODO(back-end): 사용자 혜택 API가 준비되면 benefitSnapshot 기반 영역을 서버 데이터로 교체한다.
 
   useEffect(() => {
     if (user?.role === ROLES.USER) {
-      getMyBookings(user.userId || 1).then(res => setBookings(res.data)).catch(() => {});
-      getMyInquiries(user.userId || 1).then(res => setInquiries(res.data)).catch(() => {});
+      getMyBookings(user.userId || 1).then((res) => setBookings(res.data)).catch(() => {});
     }
   }, [user]);
 
-  const handleLogout = () => { logout(); navigate('/'); };
-
-  const roleLabelMap = { [ROLES.USER]: '일반 사용자', [ROLES.SELLER]: '판매자', [ROLES.ADMIN]: '관리자' };
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <div style={s.wrap}>
       <div style={s.inner}>
-        {/* ── 좌측 사이드바 ── */}
         <aside style={s.sidebar}>
           <div style={s.profile}>
             <div style={s.avatar}>{user.name[0]}</div>
             <div>
               <p style={s.profileName}>{user.name}</p>
               <p style={s.profileEmail}>{user.email}</p>
-              <span style={s.roleBadge}>{roleLabelMap[user.role]}</span>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={s.roleBadge}>{roleLabelMap[user.role]}</span>
+                {user.role === ROLES.USER ? <span style={s.gradeBadge}>{benefitSnapshot.currentGrade} 등급</span> : null}
+              </div>
             </div>
           </div>
 
           <nav style={s.sideNav}>
-            {user.role === ROLES.USER && USER_TABS.map(t => (
+            {user.role === ROLES.USER ? USER_TABS.map((item) => (
               <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                style={{ ...s.navItem, background: tab === t.key ? C.bgGray : 'transparent', fontWeight: tab === t.key ? '700' : '400' }}
+                key={item.key}
+                onClick={() => setTab(item.key)}
+                style={{ ...s.navItem, background: tab === item.key ? C.bgGray : 'transparent', fontWeight: tab === item.key ? '700' : '400' }}
               >
-                {t.label}
+                {item.label}
               </button>
-            ))}
+            )) : null}
 
-            {user.role === ROLES.USER && (
+            {user.role === ROLES.USER ? (
               <Link to="/inquiry/create" style={{ ...s.navItem, textDecoration: 'none', color: C.text, display: 'block', marginTop: '4px' }}>
                 + 문의하기
               </Link>
-            )}
+            ) : null}
 
-            {user.role === ROLES.SELLER && SELLER_TABS.map(t => (
-              <Link key={t.key} to={t.to} style={{ ...s.navItem, textDecoration: 'none', color: C.text, display: 'block' }}>
-                {t.label}
+            {user.role === ROLES.SELLER ? SELLER_TABS.map((item) => (
+              <Link key={item.key} to={item.to} style={{ ...s.navItem, textDecoration: 'none', color: C.text, display: 'block' }}>
+                {item.label}
               </Link>
-            ))}
+            )) : null}
 
-            {user.role === ROLES.ADMIN && (
+            {user.role === ROLES.ADMIN ? (
               <Link to="/admin" style={{ ...s.navItem, textDecoration: 'none', color: C.text, display: 'block' }}>
                 관리자 대시보드
               </Link>
-            )}
+            ) : null}
           </nav>
 
           <button onClick={handleLogout} style={s.logoutBtn}>로그아웃</button>
         </aside>
 
-        {/* ── 우측 콘텐츠 ── */}
         <main style={s.content}>
-          {user.role === ROLES.USER && (
+          {user.role === ROLES.USER ? (
             <>
-              <h2 style={s.contentTitle}>{tab === 'bookings' ? '내 예약' : '내 문의'}</h2>
-              {tab === 'bookings' && <BookingsList bookings={bookings} />}
-              {tab === 'inquiries' && <InquiriesList inquiries={inquiries} />}
+              <h2 style={s.contentTitle}>{USER_TABS.find((item) => item.key === tab)?.label}</h2>
+              {tab === 'bookings' ? <BookingsList bookings={bookings} /> : null}
+              {tab === 'wishlist' ? <WishlistSection /> : null}
+              {tab === 'grade' ? <GradeSection /> : null}
+              {tab === 'points' ? <PointsSection /> : null}
+              {tab === 'coupons' ? <CouponsSection /> : null}
+              {tab === 'myinfo' ? <MyInfoSection user={user} logout={handleLogout} updateCurrentUser={updateCurrentUser} /> : null}
+              {tab === 'settings' ? <SettingsSection /> : null}
             </>
-          )}
-          {user.role === ROLES.SELLER && (
+          ) : null}
+
+          {user.role === ROLES.SELLER ? (
             <>
               <h2 style={s.contentTitle}>판매자 관리</h2>
-              <p style={{ color: C.textSub, fontSize: '14px' }}>좌측 메뉴에서 항목을 선택하세요.</p>
+              <p style={s.helperText}>좌측 메뉴에서 항목을 선택하세요.</p>
             </>
-          )}
-          {user.role === ROLES.ADMIN && (
+          ) : null}
+
+          {user.role === ROLES.ADMIN ? (
             <>
               <h2 style={s.contentTitle}>관리자 페이지</h2>
-              <p style={{ color: C.textSub, fontSize: '14px' }}>좌측 메뉴에서 항목을 선택하세요.</p>
+              <p style={s.helperText}>좌측 메뉴에서 항목을 선택하세요.</p>
             </>
-          )}
+          ) : null}
         </main>
       </div>
     </div>
@@ -149,84 +138,71 @@ export default function MyPage() {
 }
 
 const s = {
-  wrap: { background: C.bgGray, minHeight: 'calc(100vh - 160px)', padding: '48px 24px' },
-  inner: { maxWidth: MAX_WIDTH, margin: '0 auto', display: 'flex', gap: '40px', alignItems: 'flex-start' },
+  wrap: { background: C.bgWarm, minHeight: 'calc(100vh - 160px)', padding: '56px 24px' },
+  inner: { maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '28px', alignItems: 'flex-start' },
   sidebar: {
-    width: '260px',
+    width: '240px',
     flexShrink: 0,
     background: C.bg,
-    borderRadius: '16px',
+    borderRadius: '20px',
     padding: '24px',
-    boxShadow: S.card,
+    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+    border: `1px solid ${C.borderLight}`,
     position: 'sticky',
     top: '100px',
   },
-  profile: { display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '24px', paddingBottom: '24px', borderBottom: `1px solid ${C.borderLight}` },
+  profile: { display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '28px', paddingBottom: '24px', borderBottom: `1px solid ${C.borderLight}` },
   avatar: {
-    width: '48px',
-    height: '48px',
+    width: '56px',
+    height: '56px',
     borderRadius: '50%',
     background: C.primary,
     color: '#fff',
-    fontSize: '20px',
-    fontWeight: '700',
+    fontSize: '24px',
+    fontWeight: '800',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    boxShadow: '0 4px 12px rgba(232,72,74,0.3)',
   },
-  profileName: { fontSize: '16px', fontWeight: '700', color: C.text, margin: '0 0 2px' },
-  profileEmail: { fontSize: '12px', color: C.textSub, margin: '0 0 6px' },
-  roleBadge: { fontSize: '11px', fontWeight: '600', background: '#FFF0F3', color: C.primary, padding: '2px 8px', borderRadius: '20px' },
-  sideNav: { display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '24px' },
+  profileName: { fontSize: '18px', fontWeight: '800', color: C.text, margin: '0 0 4px' },
+  profileEmail: { fontSize: '12px', color: C.textSub, margin: '0 0 8px' },
+  roleBadge: { fontSize: '11px', fontWeight: '700', background: '#FFF1F1', color: C.primary, padding: '4px 10px', borderRadius: '999px', display: 'inline-block' },
+  gradeBadge: { fontSize: '11px', fontWeight: '700', background: '#EEF2FF', color: '#4F46E5', padding: '4px 10px', borderRadius: '999px', display: 'inline-block' },
+  sideNav: { display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '28px' },
   navItem: {
     width: '100%',
     textAlign: 'left',
-    padding: '10px 12px',
+    padding: '12px 14px',
     border: 'none',
-    borderRadius: R.md,
-    fontSize: '14px',
+    borderRadius: '12px',
+    fontSize: '15px',
     color: C.text,
     cursor: 'pointer',
+    transition: 'background 0.2s',
+    outline: 'none',
   },
   logoutBtn: {
     width: '100%',
-    padding: '10px',
-    background: 'none',
+    padding: '12px',
+    background: '#fff',
     border: `1px solid ${C.border}`,
-    borderRadius: R.md,
+    borderRadius: '12px',
     fontSize: '14px',
+    fontWeight: '600',
     color: C.textSub,
     cursor: 'pointer',
   },
   content: {
     flex: 1,
     background: C.bg,
-    borderRadius: '16px',
-    padding: '32px',
-    boxShadow: S.card,
+    borderRadius: '20px',
+    padding: '40px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+    border: `1px solid ${C.borderLight}`,
     minHeight: '400px',
   },
-  contentTitle: { fontSize: '22px', fontWeight: '700', color: C.text, margin: '0 0 24px' },
-};
-
-const sCard = {
-  card: {
-    display: 'flex',
-    gap: '16px',
-    border: `1px solid ${C.borderLight}`,
-    borderRadius: R.lg,
-    overflow: 'hidden',
-    padding: '16px',
-  },
-  img: { width: '100px', height: '80px', objectFit: 'cover', borderRadius: R.md, flexShrink: 0 },
-  body: { flex: 1, minWidth: 0 },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' },
-  name: { fontSize: '15px', fontWeight: '700', color: C.text, margin: 0 },
-  meta: { fontSize: '13px', color: C.textSub, margin: '0 0 4px' },
-  price: { fontSize: '14px', fontWeight: '600', color: C.text, margin: 0 },
-  inquiryCard: { border: `1px solid ${C.borderLight}`, borderRadius: R.lg, padding: '16px 20px' },
-  inquiryTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' },
-  inquiryTitle: { fontSize: '15px', fontWeight: '600', color: C.text },
-  inquiryMeta: { fontSize: '13px', color: C.textSub, margin: 0 },
+  contentTitle: { fontSize: '24px', fontWeight: '800', color: '#1A1A1A', margin: '0 0 32px' },
+  helperText: { color: C.textSub, fontSize: '14px' },
 };

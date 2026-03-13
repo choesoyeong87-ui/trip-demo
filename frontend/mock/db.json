@@ -189,6 +189,54 @@
       "bookingStatus": "CONFIRMED",
       "userId": 1,
       "id": 4
+    },
+    {
+      "lodgingId": 6,
+      "lodgingName": "전주 한옥 스테이",
+      "thumbnailUrl": "https://picsum.photos/seed/ldg6/800/600",
+      "checkIn": "2026-03-11",
+      "checkOut": "2026-03-25",
+      "guests": 2,
+      "totalPrice": 1540000,
+      "bookingStatus": "CONFIRMED",
+      "userId": 9000,
+      "id": 5
+    },
+    {
+      "lodgingId": 1,
+      "lodgingName": "한라산 뷰 펜션",
+      "thumbnailUrl": "https://picsum.photos/seed/ldg1/800/600",
+      "checkIn": "2026-03-11",
+      "checkOut": "2026-03-18",
+      "guests": 2,
+      "totalPrice": 840000,
+      "bookingStatus": "CONFIRMED",
+      "userId": 9000,
+      "id": 6
+    },
+    {
+      "lodgingId": 1,
+      "lodgingName": "한라산 뷰 펜션",
+      "thumbnailUrl": "https://picsum.photos/seed/ldg1/800/600",
+      "checkIn": "2026-03-11",
+      "checkOut": "2026-03-24",
+      "guests": 2,
+      "totalPrice": 1560000,
+      "bookingStatus": "CONFIRMED",
+      "userId": 9000,
+      "id": 7
+    },
+    {
+      "lodgingId": 4,
+      "lodgingName": "부산 광안리 게스트하우스",
+      "thumbnailUrl": "https://picsum.photos/seed/ldg4/800/600",
+      "checkIn": "2026-03-10",
+      "checkOut": "2026-03-17",
+      "guests": 2,
+      "totalPrice": 420000,
+      "bookingStatus": "CONFIRMED",
+      "userId": 9000,
+      "id": 8
     }
   ],
   "inquiries": [
@@ -216,7 +264,7 @@
   "users": [
     {
       "id": 1,
-      "name": "일반유저",
+      "name": "되나?",
       "email": "user@test.com",
       "role": "USER"
     },

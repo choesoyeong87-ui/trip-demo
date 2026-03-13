@@ -22,3 +22,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Ignore all markdown files
+*.md
+# Except root README.md
+!/README.md
+!BACKEND_SETUP.md
+!doc/db-schema-reference.md
+!doc/lodging-review-plan.md
+!doc/project-structure-spec.md
+!backend/tripzone-backend/.mvn/
+!backend/tripzone-backend/.mvn/wrapper/
+!backend/tripzone-backend/.mvn/wrapper/maven-wrapper.properties
+!backend/tripzone-backend/src/main/resources/
+!backend/tripzone-backend/src/main/resources/application.properties
+!backend/tripzone-backend/src/main/resources/application-local.properties
+!backend/tripzone-backend/src/main/resources/application-oracle.properties
+
+# AI and Agent related folders
+agents/
+commands/
+.gemini/

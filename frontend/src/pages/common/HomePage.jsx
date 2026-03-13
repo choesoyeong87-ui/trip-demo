@@ -1,57 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildImageVariant as buildImageVariantFromComponent, HorizontalLodgingRow as HomeHorizontalLodgingRow, PromoEventRow as HomePromoEventRow } from '../../components/home/HomeSections';
 import SearchBar from '../../components/lodging/SearchBar';
 import { getLodgings } from '../../api/lodging';
+import { EVENT_ITEMS } from '../../mock/eventData';
+import { PROMOTION_ITEMS } from '../../mock/promotionData';
 import { C, MAX_WIDTH } from '../../styles/tokens';
 
 const quickThemes = [
-  { label: '여행 준비', emoji: '🧳' },
-  { label: '캠핑', emoji: '⛺' },
-  { label: '항공권', emoji: '✈️' },
-  { label: '호텔', emoji: '🏨' },
-  { label: '숙소', emoji: '🏠' },
-  { label: '풀빌라', emoji: '🏖️' },
-  { label: '모텔', emoji: '🏢' },
+  { label: '국내숙소', emoji: '🏨' },
+  { label: '해외숙소', emoji: '✈️' },
+  { label: '패키지 여행', emoji: '🎁' },
+  { label: '항공', emoji: '🛫' },
+  { label: '항공+숙소', emoji: '🛄' },
+  { label: '레저·티켓', emoji: '🎫' },
   { label: '렌터카', emoji: '🚗' },
-];
-
-const promoBanners = [
-  {
-    lead: '봄 맞이 국내여행 할인 만개!',
-    title: '최대 10% 할인\n국내숙소 쿠폰팩',
-    date: '26.03.01 - 26.03.31 23:59',
-    subtitle: '봄맞이 국내숙소 쿠폰팩',
-    imageUrl: 'https://picsum.photos/seed/tripzone-event-flower/280/280',
-    circle: '#DDF3FF',
-    gradient: 'linear-gradient(135deg, #F7FAFF 0%, #EAF4FF 55%, #FDEEEE 100%)',
-  },
-  {
-    lead: '5월 황금연휴는 한 번 더 할인!',
-    title: '최대 12%\n해외숙소 쿠폰팩',
-    date: '26.03.01 - 26.03.31 23:59',
-    subtitle: '해외숙소 봄맞이 쿠폰팩',
-    imageUrl: 'https://picsum.photos/seed/tripzone-event-tower/280/280',
-    circle: '#F7E8FF',
-    gradient: 'linear-gradient(135deg, #FDF7FF 0%, #F2E9FF 55%, #F3F0FF 100%)',
-  },
-  {
-    lead: '매주 월·목 오전 10시 오픈!',
-    title: '놀라운 특가 등장!\n국내여행 오픈런',
-    date: '24.12.01 - 99.12.31 23:59',
-    subtitle: '국내여행 오픈런',
-    imageUrl: 'https://picsum.photos/seed/tripzone-event-gift/280/280',
-    circle: '#DBF3FF',
-    gradient: 'linear-gradient(135deg, #F7FDFF 0%, #E4F5FF 55%, #EFF7FF 100%)',
-  },
-  {
-    lead: '매주 화·수·금 오전 10시 오픈!',
-    title: '놀라운 특가 등장\n해외여행 오픈런',
-    date: '24.12.01 - 99.12.31 23:59',
-    subtitle: '해외여행 오픈런',
-    imageUrl: 'https://picsum.photos/seed/tripzone-event-bag/280/280',
-    circle: '#FFF3C8',
-    gradient: 'linear-gradient(135deg, #FFFDF5 0%, #FFF2D8 55%, #FFECE2 100%)',
-  },
+  { label: '공간대여', emoji: '🏢' },
 ];
 
 const serviceHighlights = [
@@ -129,7 +93,7 @@ function buildImageVariant(url, seedSuffix) {
 
 function PromoEventCard({ banner }) {
   return (
-    <article style={s.promoItem} className="tz-lift-soft">
+    <article style={s.promoItem} className="tz-lift-soft tz-promo-card">
       <div style={{ ...s.promoVisualShell, background: banner.gradient }}>
         <div>
           <p style={s.promoLead}>{banner.lead}</p>
@@ -138,7 +102,7 @@ function PromoEventCard({ banner }) {
           <p style={s.promoDate}>{banner.date}</p>
         </div>
         <div style={{ ...s.promoCircle, background: banner.circle }}>
-          <img src={banner.imageUrl} alt={banner.subtitle} style={s.promoCircleImage} />
+          <img src={banner.imageUrl} alt={banner.subtitle} style={s.promoCircleImage} className="tz-promo-image" />
         </div>
       </div>
     </article>
@@ -247,13 +211,18 @@ export default function HomePage() {
   }, []);
 
   const themeLoop = useMemo(() => [...quickThemes, ...quickThemes], []);
+  const promoBanners = useMemo(
+    () => PROMOTION_ITEMS.map((item) => ({ ...item, onClick: () => navigate(`/promotions/${item.slug}`) })),
+    [navigate]
+  );
+  const eventCards = useMemo(() => EVENT_ITEMS.slice(0, 4), []);
   const newOpenings = useMemo(() => {
     if (!lodgings.length) return [];
     return Array.from({ length: 2 }).flatMap((_, idx) =>
       lodgings.slice(0, 6).map((item) => ({
         ...item,
         cardKey: `new-${item.lodgingId}-${idx}`,
-        thumbnailUrl: buildImageVariant(item.thumbnailUrl, `new-${idx}-${item.lodgingId}`),
+        thumbnailUrl: buildImageVariantFromComponent(item.thumbnailUrl, `new-${idx}-${item.lodgingId}`),
       }))
     );
   }, [lodgings]);
@@ -283,7 +252,7 @@ export default function HomePage() {
             name: variantName,
             cardKey: `${row.region}-${item.lodgingId}-${rowIdx}-${loopIdx}-${itemIdx}`,
             pricePerNight: item.pricePerNight + ((variantIdx % 5) * 3200),
-            thumbnailUrl: buildImageVariant(item.thumbnailUrl, `${row.region}-${variantIdx}-${item.lodgingId}`),
+            thumbnailUrl: buildImageVariantFromComponent(item.thumbnailUrl, `${row.region}-${variantIdx}-${item.lodgingId}`),
           };
         })
       );
@@ -303,6 +272,10 @@ export default function HomePage() {
         .tz-lift-soft { transition: transform .22s ease, box-shadow .22s ease; }
         .tz-lift-soft:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,.12); }
         .tz-horizontal::-webkit-scrollbar { display: none; }
+        .tz-promo-card:hover .tz-promo-image { transform: scale(1.05); }
+        .tz-promo-image { transition: transform 0.3s ease; }
+        .tz-theme-orb-wrap:hover .tz-theme-orb { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); border-color: ${C.primary}; }
+        .tz-theme-orb { transition: all 0.2s ease; }
         @keyframes tz-marquee {
           from { transform: translateX(0); }
           to { transform: translateX(-50%); }
@@ -326,13 +299,13 @@ export default function HomePage() {
           </div>
           <div style={s.heroRight}>
             <div style={s.searchShell}>
-              <SearchBar />
+              <SearchBar showTabs />
             </div>
             <div style={s.themeWrap}>
               <div style={s.themeTrack} className="tz-theme-track">
                 {themeLoop.map((theme, idx) => (
-                  <button key={`${theme.label}-${idx}`} style={s.themeChip} onClick={() => navigate('/lodgings')}>
-                    <span style={s.themeOrb}><span style={s.themeOrbEmoji}>{theme.emoji}</span></span>
+                  <button key={`${theme.label}-${idx}`} style={s.themeChip} className="tz-theme-orb-wrap" onClick={() => navigate('/lodgings')}>
+                    <span style={s.themeOrb} className="tz-theme-orb"><span style={s.themeOrbEmoji}>{theme.emoji}</span></span>
                     <span style={s.themeLabel}>{theme.label}</span>
                   </button>
                 ))}
@@ -345,17 +318,47 @@ export default function HomePage() {
       <section style={s.sectionCompact}>
         <div style={s.inner}>
           <div style={s.sectionHead}>
-            <h2 style={s.sectionTitle}>진행 중인 이벤트</h2>
-            <button style={s.linkBtn}>더보기</button>
+            <h2 style={s.sectionTitle}>진행 중인 프로모션</h2>
+            <button style={s.linkBtn} onClick={() => navigate('/promotions')}>더보기</button>
           </div>
-          <PromoEventRow banners={promoBanners} />
+          <HomePromoEventRow banners={promoBanners} />
+        </div>
+      </section>
+
+      <section style={s.sectionCompact}>
+        <div style={s.inner}>
+          <div style={s.sectionHead}>
+            <h2 style={s.sectionTitle}>참여형 이벤트</h2>
+            <button style={s.linkBtn} onClick={() => navigate('/events')}>더보기</button>
+          </div>
+          <div style={s.eventGrid}>
+            {eventCards.map((item) => (
+              <article key={item.slug} style={s.eventCard} className="tz-lift-soft" onClick={() => navigate(`/events/${item.slug}`)}>
+                <div style={{ ...s.eventVisual, background: item.gradient }}>
+                  <div>
+                    <p style={s.eventLead}>{item.lead}</p>
+                    <h3 style={s.eventTitle}>{item.title}</h3>
+                    <p style={s.eventSubtitle}>{item.subtitle}</p>
+                  </div>
+                  <div style={{ ...s.eventCircle, background: item.circle }}>
+                    <img src={item.imageUrl} alt={item.subtitle} style={s.eventImage} />
+                  </div>
+                </div>
+                <div style={s.eventBody}>
+                  <p style={s.eventDate}>{item.date}</p>
+                  <p style={s.eventDesc}>{item.description}</p>
+                  <span style={s.eventAction}>이벤트 참여 정보 보기</span>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
       <section style={s.sectionAlt}>
         <div style={s.inner}>
           {lodgingRows.map((row) => (
-            <HorizontalLodgingRow
+            <HomeHorizontalLodgingRow
               key={row.title}
               title={row.title}
               cards={row.cards}
@@ -492,11 +495,12 @@ const s = {
   },
   heroRight: { minWidth: 0 },
   searchShell: {
-    background: '#FFFFFFDD',
-    border: '1px solid #F2E5E5',
-    borderRadius: '20px',
-    padding: '16px',
-    boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
+    background: 'rgba(255, 255, 255, 0.45)', // more transparent to show gradient/glow
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255, 255, 255, 0.8)',
+    borderRadius: '24px',
+    padding: '20px',
+    boxShadow: '0 24px 64px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.04)',
   },
   themeWrap: {
     marginTop: '16px',
@@ -521,15 +525,15 @@ const s = {
     cursor: 'pointer',
   },
   themeOrb: {
-    width: '62px',
-    height: '62px',
-    borderRadius: '999px',
-    background: 'radial-gradient(circle at 30% 30%, #FFFFFF 0%, #F7F7F7 75%)',
+    width: '68px',
+    height: '68px',
+    borderRadius: '24px',
+    background: '#FFFFFF',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '1px solid #ECECEC',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+    border: '1px solid rgba(0,0,0,0.04)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
   },
   themeOrbEmoji: {
     fontSize: '30px',
@@ -578,13 +582,15 @@ const s = {
   },
   promoItem: { minWidth: '380px', flexShrink: 0 },
   promoVisualShell: {
-    borderRadius: '16px',
-    minHeight: '152px',
-    padding: '14px 16px',
+    borderRadius: '24px',
+    minHeight: '172px',
+    padding: '24px 28px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: '10px',
+    gap: '16px',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+    border: '1px solid rgba(255,255,255,0.6)',
   },
   promoLead: { margin: 0, color: '#5A5A5A', fontSize: '10px', fontWeight: 700 },
   promoTitle: {
@@ -608,6 +614,18 @@ const s = {
   promoCircleImage: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: '999px' },
   promoSub: { margin: '10px 0 2px', fontSize: '13px', fontWeight: 700, color: '#343434' },
   promoDate: { margin: 0, fontSize: '12px', color: '#777777', fontWeight: 500 },
+  eventGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' },
+  eventCard: { background: '#fff', border: `1px solid ${C.borderLight}`, borderRadius: '24px', overflow: 'hidden', cursor: 'pointer', boxShadow: '0 12px 28px rgba(15,23,42,0.05)' },
+  eventVisual: { minHeight: '200px', padding: '22px', display: 'flex', justifyContent: 'space-between', gap: '18px', alignItems: 'center' },
+  eventLead: { margin: '0 0 8px', fontSize: '12px', fontWeight: '800', color: C.primary },
+  eventTitle: { margin: '0 0 10px', fontSize: '24px', lineHeight: 1.15, color: C.text, whiteSpace: 'pre-line' },
+  eventSubtitle: { margin: 0, fontSize: '14px', color: C.textSub, fontWeight: '700' },
+  eventCircle: { width: '84px', height: '84px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' },
+  eventImage: { width: '100%', height: '100%', objectFit: 'cover' },
+  eventBody: { padding: '20px 22px 22px' },
+  eventDate: { margin: '0 0 10px', fontSize: '13px', color: C.textLight, fontWeight: '700' },
+  eventDesc: { margin: '0 0 16px', fontSize: '14px', lineHeight: 1.7, color: C.textSub },
+  eventAction: { display: 'inline-flex', padding: '10px 14px', borderRadius: '999px', background: '#FFF1F1', color: C.primary, fontSize: '13px', fontWeight: '800' },
   rowSection: { marginBottom: '34px' },
   rowHeader: {
     display: 'flex',

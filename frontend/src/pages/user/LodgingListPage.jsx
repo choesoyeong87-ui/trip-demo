@@ -39,6 +39,15 @@ function isRegionMatch(lodgingRegion, selectedRegion) {
   return aliasNormalized.some((alias) => lodging === alias || lodging.includes(alias) || alias.includes(lodging));
 }
 
+function isKeywordMatch(lodging, keyword) {
+  const term = normalizeRegionText(keyword);
+  if (!term) return true;
+  const haystack = [lodging.name, lodging.region, lodging.address, lodging.description]
+    .map(normalizeRegionText)
+    .join(' ');
+  return haystack.includes(term);
+}
+
 function sortLodgings(list, sort) {
   const copy = [...list];
   if (sort === 'price_asc') return copy.sort((a, b) => a.pricePerNight - b.pricePerNight);
@@ -81,7 +90,10 @@ function MapBoundsWatcher({ onBoundsChange }) {
 export default function LodgingListPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const keyword = params.get('keyword') || '';
   const region = params.get('region') || '';
+  const benefit = params.get('benefit') || '';
+  const scope = params.get('scope') || '';
   const checkIn = params.get('checkIn') || '';
   const checkOut = params.get('checkOut') || '';
   const guests = params.get('guests') || 2;
@@ -99,10 +111,10 @@ export default function LodgingListPage() {
     getLodgings()
       .then((res) => {
         const all = Array.isArray(res.data) ? res.data : [];
-        setLodgings(region ? all.filter((lodging) => isRegionMatch(lodging.region, region)) : all);
+        setLodgings(all.filter((lodging) => isRegionMatch(lodging.region, region) && isKeywordMatch(lodging, keyword)));
       })
       .catch(() => setLodgings([]));
-  }, [region]);
+  }, [keyword, region]);
 
   const sorted = useMemo(() => sortLodgings(lodgings, sort), [lodgings, sort]);
 
@@ -209,6 +221,8 @@ export default function LodgingListPage() {
       <div style={s.searchSticky}>
         <div style={s.searchInner}>
           <SearchBar
+            key={[keyword, region, checkIn, checkOut, Number(guests)].join('|')}
+            defaultKeyword={keyword}
             defaultRegion={region}
             defaultCheckIn={checkIn}
             defaultCheckOut={checkOut}
@@ -220,10 +234,23 @@ export default function LodgingListPage() {
       <div style={s.splitWrap} className="tz-lodging-split">
         <section style={s.listPane}>
           <div style={s.filterBar}>
-            <p style={s.resultCount}>
-              {region ? `'${region}' 검색 결과` : '지도에 표시된 숙소'}
+            <div>
+              {benefit ? (
+                <p style={s.benefitGuide}>
+                  {benefit === 'points'
+                    ? '포인트 사용 가능한 숙소를 보고 있습니다.'
+                    : scope === 'domestic'
+                      ? '쿠폰 적용 가능한 국내 숙소를 보고 있습니다.'
+                      : scope === 'all'
+                        ? '쿠폰 적용 가능한 숙소를 보고 있습니다.'
+                        : null}
+                </p>
+              ) : null}
+              <p style={s.resultCount}>
+              {keyword ? `'${keyword}' 검색 결과` : region ? `'${region}' 검색 결과` : '지도에 표시된 숙소'}
               <span style={s.count}> {visibleLodgings.length}개</span>
-            </p>
+              </p>
+            </div>
             <div style={s.sortGroup}>
               {SORT_OPTIONS.map((option) => (
                 <button
@@ -231,9 +258,10 @@ export default function LodgingListPage() {
                   onClick={() => setSort(option.value)}
                   style={{
                     ...s.sortBtn,
-                    background: sort === option.value ? C.text : C.bg,
-                    color: sort === option.value ? '#fff' : C.textSub,
-                    borderColor: sort === option.value ? C.text : C.border,
+                    background: sort === option.value ? '#1F2530' : '#FFFFFF',
+                    color: sort === option.value ? '#fff' : '#5D6778',
+                    borderColor: sort === option.value ? '#1F2530' : '#E3E6EC',
+                    boxShadow: sort === option.value ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
                   }}
                 >
                   {option.label}
@@ -355,10 +383,10 @@ const s = {
   },
   mapFrame: {
     position: 'relative',
-    borderRadius: '18px',
+    borderRadius: '24px',
     overflow: 'hidden',
     border: `1px solid ${C.borderLight}`,
-    boxShadow: '0 14px 34px rgba(0,0,0,0.12)',
+    boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
     height: '100%',
   },
   mapOverlayTop: {
@@ -422,26 +450,35 @@ const s = {
     flexWrap: 'wrap',
     gap: '12px',
   },
+  benefitGuide: {
+    margin: '0 0 8px',
+    fontSize: '12px',
+    fontWeight: '800',
+    color: C.primary,
+  },
   resultCount: { fontSize: '22px', fontWeight: '700', color: C.text, margin: 0 },
   count: { fontSize: '16px', fontWeight: '400', color: C.textSub },
   sortGroup: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
   sortBtn: {
-    padding: '7px 16px',
+    padding: '8px 18px',
     border: '1px solid',
-    borderRadius: '20px',
-    fontSize: '13px',
-    fontWeight: '500',
+    borderRadius: '999px',
+    fontSize: '14px',
+    fontWeight: '700',
     cursor: 'pointer',
+    transition: 'all 0.2s ease',
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(248px, 1fr))',
     gap: '18px',
+    paddingTop: '6px',
   },
   cardWrap: {
     borderRadius: '14px',
     border: '2px solid transparent',
     transition: 'border-color .18s ease, box-shadow .18s ease',
+    paddingTop: '4px',
   },
   popupWrap: { minWidth: '160px' },
   popupMeta: { marginTop: '4px', color: '#6b7280', fontSize: '12px' },

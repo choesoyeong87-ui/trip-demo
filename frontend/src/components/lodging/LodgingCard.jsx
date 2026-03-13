@@ -1,20 +1,38 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { C } from '../../styles/tokens';
+import { useWishlist } from '../../hooks/useWishlist';
 
 export default function LodgingCard({ lodging }) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const { lodgingId, name, region, address, pricePerNight, thumbnailUrl, rating } = lodging;
 
   return (
     <div
-      style={s.card}
+      style={{
+        ...s.card,
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 16px 32px rgba(0,0,0,0.1)' : '0 4px 12px rgba(0,0,0,0.05)',
+        borderColor: hovered ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.04)',
+      }}
       onClick={() => navigate(`/lodgings/${lodgingId}`)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <div style={s.imgWrap}>
+        <button
+          type="button"
+          style={{ ...s.heartBtn, ...(isWishlisted(lodgingId) ? s.heartBtnActive : null) }}
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleWishlist(lodging);
+          }}
+          aria-label="찜"
+        >
+          {isWishlisted(lodgingId) ? '♥' : '♡'}
+        </button>
         <img
           src={thumbnailUrl}
           alt={name}
@@ -41,12 +59,14 @@ const s = {
   card: {
     cursor: 'pointer',
     background: '#FFFFFF',
-    border: '1px solid #DEE2E6',
-    borderRadius: '12px',
+    border: '1px solid rgba(0,0,0,0.04)',
+    borderRadius: '16px',
     overflow: 'hidden',
-    boxShadow: '0 8px 18px rgba(0,0,0,0.06)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+    transition: 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease',
   },
   imgWrap: {
+    position: 'relative',
     overflow: 'hidden',
     borderRadius: '0',
     aspectRatio: '4 / 3',
@@ -59,6 +79,25 @@ const s = {
     objectFit: 'cover',
     transition: 'transform 0.4s ease',
     display: 'block',
+  },
+  heartBtn: {
+    position: 'absolute',
+    right: '10px',
+    top: '10px',
+    zIndex: 1,
+    width: '32px',
+    height: '32px',
+    borderRadius: '999px',
+    border: '1px solid #FFFFFFAA',
+    background: '#1F1F1F77',
+    color: '#fff',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+  heartBtnActive: {
+    background: '#FFF1F1',
+    color: C.primary,
+    border: '1px solid #F4C7C8',
   },
   body: { padding: '12px 12px 13px' },
   topRow: {
